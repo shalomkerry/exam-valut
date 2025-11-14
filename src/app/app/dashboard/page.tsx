@@ -116,9 +116,9 @@ export default  function DashboardPage() {
     {loading ? (
       <p>Loading exams…</p>
     ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1h  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
         {filtered.map((exam) => (
-          <div key={exam.id} className="bg-white/70 rounded-lg shadow-sm overflow-hidden h-[340px] flex flex-col">
+          <div key={exam.id} className="hover:-translate-y-2 hover:drop-shadow-blue-600 bg-white/70 rounded-lg shadow-sm overflow-hidden h-[340px] flex flex-col">
             <img src={exam.image} alt="" className="w-[300px] h-3/4"/>
             <div className="p-3 flex-1 flex flex-col gap-2">
               <h3 className="text-black font-bold leading-tight">{exam.title}</h3>
