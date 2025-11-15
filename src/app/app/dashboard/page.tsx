@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
-import { neon } from "@neondatabase/serverless";
+import { loadSubjects } from "@/actions/FetchSubjects";
 type Subjects = {
-  id: string;
+  id: number;
   title: string;
   type:string;
   image:string,
+  sub_code:string,
 };
 
-export default  function DashboardPage() {
-  const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL!)
+export default function DashboardPage() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const [loading, setLoading] = useState(true);
@@ -22,6 +22,10 @@ export default  function DashboardPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
 
+//  async function getsubjects(id: Subjects['id']):Promise<any>  {
+//   return data.select().from(subjects).where(eq(subjects.id, id));
+// }
+
   useEffect(() => {
     // redirect to signin if not authenticated
     if (session === undefined) return; // still loading
@@ -29,12 +33,11 @@ export default  function DashboardPage() {
       router.replace("/signin");
       return;
     }
+
     const fetchSubjects = async () => {
+
       try {
-        const subjects = (await sql`
-      Select * from subjects
-      order by title
-      `) as Subjects[];
+  const subjects = await loadSubjects() as Subjects[];
         setExams(subjects);
       } catch (err) {
         console.error(err);
