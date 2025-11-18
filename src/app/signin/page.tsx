@@ -34,7 +34,6 @@ export default function SignInPage() {
         setSuccess("Signed in successfully.");
         setEmail("");
         setPassword("");
-        // Redirect to home which will display the user's name/email
         router.push("/app/dashboard");
       }
     } catch (err: any) {

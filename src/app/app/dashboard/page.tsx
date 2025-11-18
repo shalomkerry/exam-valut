@@ -22,18 +22,9 @@ export default function DashboardPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
 
-//  async function getsubjects(id: Subjects['id']):Promise<any>  {
-//   return data.select().from(subjects).where(eq(subjects.id, id));
-// }
-
   useEffect(() => {
     // redirect to signin if not authenticated
     if (session === undefined) return; // still loading
-    if (!session?.user) {
-      router.replace("/signin");
-      return;
-    }
-
     const fetchSubjects = async () => {
 
       try {

@@ -53,8 +53,7 @@ export default function SignupPage() {
         // Try to sign in automatically so the session is created and home can show the user.
         try {
           const signInRes = await authClient.signIn.email({ email, password });
-          // ignore signIn error here — redirect anyway; home will fetch session if present
-          // but surface error if available
+          router.push('/app/dashboard')
           if (signInRes && (signInRes as any).error) {
             // still redirect to home; user may need to sign in manually if auto sign-in failed
             router.push("/");
