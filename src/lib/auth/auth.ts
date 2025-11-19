@@ -29,6 +29,7 @@ const auth = betterAuth({
       role:{
         type:["editor","approver","admin"],
         required:true,
+        input:false,
         defaultValue:'editor'
       }
     }

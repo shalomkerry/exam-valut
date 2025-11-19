@@ -52,6 +52,7 @@ export default function DashboardPage() {
 
   return (
 <div className="p-6 max-w-6xl mx-auto">
+  <button onClick={()=>router.push('/app/admin')}>hey</button>
   <header className="flex items-center justify-between mb-6">
     <div className="flex gap-4 items-center">
       <div className="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">

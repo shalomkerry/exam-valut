@@ -1,82 +1,59 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.13 0.028 261.692);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.13 0.028 261.692);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.13 0.028 261.692);
+    --primary: oklch(0.21 0.034 264.665);
+    --primary-foreground: oklch(0.985 0.002 247.839);
+    --secondary: oklch(0.967 0.003 264.542);
+    --secondary-foreground: oklch(0.21 0.034 264.665);
+    --muted: oklch(0.967 0.003 264.542);
+    --muted-foreground: oklch(0.551 0.027 264.364);
+    --accent: oklch(0.967 0.003 264.542);
+    --accent-foreground: oklch(0.21 0.034 264.665);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.577 0.245 27.325);
+    --border: oklch(0.928 0.006 264.531);
+    --input: oklch(0.928 0.006 264.531);
+    --ring: oklch(0.707 0.022 261.325);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: oklch(0.13 0.028 261.692);
+    --foreground: oklch(0.985 0.002 247.839);
+    --card: oklch(0.21 0.034 264.665);
+    --card-foreground: oklch(0.985 0.002 247.839);
+    --popover: oklch(0.21 0.034 264.665);
+    --popover-foreground: oklch(0.985 0.002 247.839);
+    --primary: oklch(0.928 0.006 264.531);
+    --primary-foreground: oklch(0.21 0.034 264.665);
+    --secondary: oklch(0.278 0.033 256.848);
+    --secondary-foreground: oklch(0.985 0.002 247.839);
+    --muted: oklch(0.278 0.033 256.848);
+    --muted-foreground: oklch(0.707 0.022 261.325);
+    --accent: oklch(0.278 0.033 256.848);
+    --accent-foreground: oklch(0.985 0.002 247.839);
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.704 0.191 22.216);
+    --border: oklch(0.278 0.033 256.848);
+    --input: oklch(0.278 0.033 256.848);
+    --ring: oklch(0.551 0.027 264.364);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Signup form styles */
-.signup-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-}
-
-.signup-card {
-  width: 100%;
-  max-width: 460px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,250,0.9));
-  color: var(--foreground);
-  border-radius: 12px;
-  padding: 28px;
-  box-shadow: 0 8px 30px rgba(16,24,40,0.12);
-  border: 1px solid rgba(16,24,40,0.04);
-}
-
-.signup-card h1 {
-  margin: 0 0 6px 0;
-  font-size: 20px;
-}
-
-.muted { color: rgba(23,23,23,0.6); font-size: 14px; }
-.small { font-size: 12px; }
-
-.label { display: block; margin-top: 12px; font-weight: 600; font-size: 13px; }
-.input {
-  width: 100%;
-  margin-top: 6px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(16,24,40,0.12);
-  background: #fff;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-.input:focus { outline: 2px solid rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.6); }
-
-.btn { padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(16,24,40,0.08); background: #f3f4f6; cursor: pointer; }
-.btn.primary { background: #2563eb; color: white; border: none; }
-.btn.secondary { background: #313745; color: rgb(210, 210, 210); border: none; }
-.btn:active { transform: translateY(1px); }
-
-.errors { margin-top: 12px; color: #b91c1c; background: rgba(185,28,28,0.06); padding: 8px 10px; border-radius: 8px; }
-.errors ul { margin: 0; padding-left: 18px; }
-.success { margin-top: 12px; color: #065f46; background: rgba(6,95,70,0.06); padding: 8px 10px; border-radius: 8px; }
-
-@media (prefers-color-scheme: dark) {
-  .signup-card { background: linear-gradient(180deg, rgba(6,6,6,0.6), rgba(15,15,15,0.6)); color: var(--foreground); border: 1px solid rgba(255,255,255,0.04); }
-  .input { background: #0b0b0b; color: var(--foreground); border: 1px solid rgba(255,255,255,0.06); }
-  .muted { color: rgba(255,255,255,0.6); }
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground  ;
+  }
 }
