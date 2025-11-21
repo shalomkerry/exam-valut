@@ -79,7 +79,7 @@ export default function SignInPage() {
             <div className="errors" aria-live="polite">
               <ul>
                 {errors.map((err, i) => (
-                  <li key={i}>{err}</li>
+                  <li key={i}>{err.length}</li>
                 ))}
               </ul>
             </div>

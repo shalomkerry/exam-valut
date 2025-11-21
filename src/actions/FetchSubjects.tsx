@@ -6,3 +6,7 @@ import { db } from '@/db/index';
 export async function loadSubjects() {
   return db.query.subjects.findMany();
 }
+
+export async function loadExams(){
+  return db.query.exams.findMany()
+}

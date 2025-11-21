@@ -85,7 +85,7 @@ export default function DashboardPage() {
         placeholder="Search by subject, course code, or exam type..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="flex-1 px-4 py-3 rounded-lg border border-gray-200 shadow-sm"
+        className="flex-1 px-4 py-3 rounded-lg border border-gray-200 shadow-sm dark:text-black"
       />
     </div>
 
