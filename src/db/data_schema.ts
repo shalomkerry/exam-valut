@@ -1,6 +1,5 @@
 import {
   pgTable,
-  serial,
   text,
   integer,
   timestamp,
@@ -17,13 +16,12 @@ export const edit_status_enum = pgEnum('edit_status', ['pending', 'approved', 'r
 // --- Exams--
 
 export const exams = pgTable('exams', {
-  id: serial('id').primaryKey(),
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   title: text('title').notNull(),
   year: text('year').notNull(),
   type: exam_type_enum('type').notNull(),
-  subject_code: text('subject_code').notNull().references(() => subjects.sub_code),
   subject_id:integer('subject_id').references(()=>subjects.id),
-  created_at:timestamp('created_at',{ withTimezone: false }).notNull(),
+  created_at:timestamp('created_at',{ withTimezone: false }).notNull().defaultNow(),
   createdByUserId: text('created_by_user_id').references(() => user.id),
 });
 
@@ -45,7 +43,7 @@ export const user = pgTable("user", {
 
 // --- Subjects Table ---
 export const subjects = pgTable('subjects',{
-id:serial('id').primaryKey(),
+id:integer("id").primaryKey().generatedAlwaysAsIdentity(),
 title: text('title').notNull().unique(),
 type: text('type').notNull(),
 image: text('image').notNull(),
@@ -56,7 +54,7 @@ sub_code:text('sub_code').unique().notNull(),
 
 // --- Exam Images Table ---
 export const examImages = pgTable('exam_images', {
-  id: serial('id').primaryKey(),
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   exam_id:integer('exam_id').references(()=>exams.id,{onDelete:'cascade'}),
   image_url: text('image_url'),
   extracted_text:jsonb('extracted_text'),
@@ -64,7 +62,7 @@ export const examImages = pgTable('exam_images', {
 
 // --- Edit ---
 export const edits = pgTable('edits', {
-  id: serial('id').primaryKey(),
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
 
   user_id: text('user_id').notNull().references(() => user.id),
 

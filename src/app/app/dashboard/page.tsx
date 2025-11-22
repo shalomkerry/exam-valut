@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const [loading, setLoading] = useState(true);
-  const [exams, setExams] = useState<Subjects[]>([]);
+  const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [query, setQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -28,8 +28,8 @@ export default function DashboardPage() {
     const fetchSubjects = async () => {
 
       try {
-  const subjects = await loadSubjects() as Subjects[];
-        setExams(subjects);
+  const fetchedSubjects = await loadSubjects() as Subjects[];
+        setSubjects(fetchedSubjects);
       } catch (err) {
         console.error(err);
         alert("Couldn't load subjects");
@@ -42,7 +42,7 @@ export default function DashboardPage() {
 
   const userName = session?.user?.name || session?.user?.email || "User";
 
-  const filtered = exams.filter((e) => {
+  const filtered = subjects.filter((e) => {
     const q = query.trim().toLowerCase();
     if (q && !(`${e.title}`.toLowerCase().includes(q))) return false;
     if (subjectFilter && !e.title.toLowerCase().includes(subjectFilter.toLowerCase())) return false;
