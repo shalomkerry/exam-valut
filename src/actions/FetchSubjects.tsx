@@ -1,12 +1,38 @@
-// src/actions/subjectActions.ts
-'use server'; // This directive ensures the file is ONLY run on the server
-
+'use server'; 
 import { db } from '@/db/index';
+import { unstable_cache } from 'next/cache';
+
+const getCachedSubjects = unstable_cache(
+  async ()=>{
+console.log('Fetching Subjects from DB')
+return await db.query.subjects.findMany()
+  },
+  ['subjects-list'],
+  {
+    revalidate:3600,
+    tags:['subjects']
+  }
+)
+
+
+const getCachedExams = unstable_cache(
+  async ()=>{
+console.log('Fetching Subjects from DB')
+return await db.query.exams.findMany()
+  },
+  ['exams-list'],
+  {
+    revalidate:3600,
+    tags:['exams']
+  }
+)
 
 export async function loadSubjects() {
-  return db.query.subjects.findMany();
+  const data =  getCachedSubjects()
+  return data
 }
 
 export async function loadExams(){
-  return db.query.exams.findMany()
+  const data =  getCachedSubjects()
+  return data
 }
