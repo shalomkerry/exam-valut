@@ -20,7 +20,7 @@ export const exams = pgTable('exams', {
   title: text('title').notNull(),
   year: text('year').notNull(),
   type: exam_type_enum('type').notNull(),
-  subject_id:integer('subject_id').references(()=>subjects.id),
+  subject_id:integer('subject_id').notNull().references(()=>subjects.id),
   created_at:timestamp('created_at',{ withTimezone: false }).notNull().defaultNow(),
   createdByUserId: text('created_by_user_id').references(() => user.id),
 });
@@ -55,7 +55,7 @@ sub_code:text('sub_code').unique().notNull(),
 // --- Exam Images Table ---
 export const examImages = pgTable('exam_images', {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  exam_id:integer('exam_id').references(()=>exams.id,{onDelete:'cascade'}),
+  exam_id:integer('exam_id').references(()=>exams.id,{onDelete:'cascade'}).notNull(),
   image_url: text('image_url'),
   extracted_text:jsonb('extracted_text'),
 });

@@ -50,7 +50,7 @@ export default function DashboardClient({initialSubjects}:any){
   <section className="text-center mb-6">
     <h1 className="text-5xl m-0 leading-tight">Access Thousands of Past Exam Papers</h1>
     <p className="text-gray-500 mt-2">
-      Find your exam papers with ease. Search by subject, course code, or exam type to prepare for your next test.
+      Find past exam papers with ease. Search by subject to prepare for your next test.
     </p>
   </section>
 
