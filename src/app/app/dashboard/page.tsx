@@ -1,8 +1,7 @@
 import { loadSubjects } from "@/actions/FetchSubjects";
-
 import DashboardClient from "./dashboard-client";
 
-type Subjects = {
+export type Subjects_Type = {
   id: number;
   title: string;
   type:string;
@@ -12,7 +11,7 @@ type Subjects = {
 
 export default async function DashboardPage() {
   // const router = useRouter();
-  const subjects = await loadSubjects() as Subjects[]
+  const subjects = await loadSubjects() as Subjects_Type[]
 
   return (
 <div className="p-6 max-w-6xl mx-auto">

@@ -2,16 +2,13 @@
 import { useState,useEffect } from "react";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
+import {Subjects} from "@/types/types"
 
-type Subjects = {
-  id: number;
-  title: string;
-  type:string;
-  image:string,
-  sub_code:string,
-};
+interface DashboardClientProps{
+    initialSubjects:Subjects[]
+}
 
-export default function DashboardClient({initialSubjects}:any){
+export default function DashboardClient({initialSubjects}:DashboardClientProps){
     const router = useRouter()
     const [subjects,setSubjects] = useState(initialSubjects)
     const [query, setQuery] = useState("");
@@ -93,7 +90,7 @@ export default function DashboardClient({initialSubjects}:any){
               <h3 className="text-black font-bold leading-tight">{exam.title}</h3>
                 <button className="w-full hover:cursor-pointer hover:scale-110  hover:inset-ring-2   bg-indigo-50 rounded-lg px-2 py-2 border-none text-black text-md  font-medium">
                   Browse Exams
-</button>
+                </button>
 
               </div>
             </div>

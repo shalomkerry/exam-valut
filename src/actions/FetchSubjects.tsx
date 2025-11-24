@@ -28,7 +28,7 @@ return await db.query.exams.findMany()
 )
 
 export async function loadSubjects() {
-  const data =  getCachedSubjects()
+  const data =  getCachedSubjects()  
   return data
 }
 

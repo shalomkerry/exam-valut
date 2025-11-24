@@ -9,6 +9,14 @@ import { Label } from "@/components/ui/label";
 import { PhotoUpload } from "@/actions/UploadImage";
 import { Check, ChevronsUpDown } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {Form_Data} from '@/types/types'
+
+    // subject_id:number,
+    // title:string,
+    // year:string,
+    // type:"final"|"quiz"|"midterm",
+    // userId:string,
+    // imageURl:string[]
 import {
   Field,
   FieldContent,
@@ -34,7 +42,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-
+import {Subjects} from '@/types/types'
+import { createExamAction } from "@/queries/Insert";
+import { useActionState } from "react";
 
 //   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
 //   title: text('title').notNull(),
@@ -47,26 +57,24 @@ import {
 type subjectOptions = {
   value:string,
   label:string
-
 }
 
-type Subjects = {
-  id: number;
-  title: string;
-  type:string;
-  image:string,
-  sub_code:string,
-};
-
-type FormData = {
-    subjectID:number,
-    title:string,
-    year:number,
-    type:string,
-    userId:string,
-    imageURl:string[]
+interface AdminClientProps{
+    initialSubjects:Subjects[]
 }
-export default function AdminClient({initialSubjects,initialExams}:any){
+
+
+export default function AdminClient({initialSubjects}:AdminClientProps){
+const [state,formAction] = useActionState(createExamAction,{
+success: false, 
+message: '',
+examId:null,
+})
+useEffect(()=>{
+    console.log(state)
+console.log(state.examId)
+},[state])
+
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [arrayOfURL, setArrayOfURL] = useState<string[]>([])
@@ -82,10 +90,10 @@ export default function AdminClient({initialSubjects,initialExams}:any){
 
   const [subjectLabel, setSubjectLabel] = useState("")
 
-  const [formData, setFormData] = useState<FormData>({
-    subjectID:0,
+  const [formData, setFormData] = useState<Form_Data>({
+    subject_id:0,
     title:'',
-    year:2015,
+    year:'2015',
     type:'final',
     userId:user_id?user_id:'',
     imageURl:[]
@@ -115,12 +123,13 @@ useEffect(()=>{
 
 
     useEffect(()=>{
+        if(Object.keys(subjectOptions).length!=0){
 const find = subjectOptions.find((subject)=>subject.label==subjectLabel)?.value
-
 setFormData((previous)=>({
     ...previous,
-    subjectID:Number(find)    
+    subject_id:Number(find)    
 }))
+        }
     },[subjectLabel])
 
     useEffect(()=>{
@@ -162,10 +171,7 @@ if(Object.keys(imageFile).length!=0){
         )
 }
 }
-const handleFormSubmit = ()=>{
-    console.log(formData)
-}
-    const handleFileChange = () => {
+  const handleFileChange = () => {
       if (fileInputRef.current && fileInputRef.current.files) {
         const selectedFiles = fileInputRef.current.files;
         setImageFile(selectedFiles)
@@ -178,7 +184,7 @@ const handleFormSubmit = ()=>{
         <FieldLegend>Image</FieldLegend>
          <Field>
          <div>
-          <form action={handleFormSubmit} className="w-full flex flex-col ">
+          <form action={formAction} className="w-full flex flex-col ">
       <Label htmlFor="picture">Picture</Label>
       <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} />
         <Button onClick={handleFileUpload}>Submit Photo</Button>
@@ -246,25 +252,30 @@ const handleFormSubmit = ()=>{
        onValueChange={(newValue) => {
         setFormData((prev) => ({
             ...prev,
-            type: newValue 
+            type: newValue  as "final"|"midterm"|"quiz"
         }));
     }}
     defaultValue="final"   
          >
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="final" id="r1" />
+        <RadioGroupItem value="final" id="r1"  />
         <Label htmlFor="r1">Final</Label>
       </div>
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="midexam" id="r2" />
-        <Label htmlFor="r2">MidExam</Label>
+        <RadioGroupItem value="midterm" id="r2" />
+        <Label htmlFor="r2">Midterm</Label>
       </div>
       <div className="flex items-center gap-3">
         <RadioGroupItem value="quiz"  id="r3" />
         <Label htmlFor="r3">Quiz</Label>
       </div>
     </RadioGroup>
-        <Button type="submit">Checking API</Button>
+        <Button type="submit" disabled={state.success}>Checking API</Button>
+   {state.message && (
+        <p className={cn("text-sm", state.success ? "text-green-600" : "text-red-600")}>
+                {state.message}
+        </p>
+        )}
           </form>
     </div>
 
