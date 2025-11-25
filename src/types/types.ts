@@ -3,8 +3,16 @@ export type Form_Data = {
     title:string,
     year:string,
     type:"final"|"quiz"|"midterm",
-    userId:string,
+    createdByUserId:string,
     imageURl:string[]
+}
+
+export type Exam_Data = {
+    subject_id:number,
+    title:string,
+    year:string,
+    type:"final"|"quiz"|"midterm",
+    userId:string,
 }
 
 export type Subjects = {
