@@ -1,6 +1,5 @@
 'use client'
 import { cn } from "@/lib/utils"
-import { authClient } from "@/lib/auth/auth-client";
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation";
 import {  useEffect, useRef, useState } from "react";
@@ -9,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { PhotoUpload } from "@/actions/UploadImage";
 import { Check, ChevronsUpDown } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {Form_Data,Exam_Data,Subjects} from '@/types/types'
+import {Form_Data,Subjects} from '@/types/types'
 
 import {
   Field,
@@ -38,52 +37,40 @@ import {
 } from "@/components/ui/popover"
 import { toast } from "sonner";
 
-//   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-//   title: text('title').notNull(),
-//   year: text('year').notNull(),
-//   type: exam_type_enum('type').notNull(),
-//   subject_id:integer('subject_id').references(()=>subjects.id),
-//   created_at:timestamp('created_at',{ withTimezone: false }).notNull().defaultNow(),
-//   createdByUserId: text('created_by_user_id').references(() => user.id),
 
 type subjectOptions = {
   value:string,
   label:string
 }
 
-interface AdminClientProps{
-    initialSubjects:Subjects[]
+interface AdminClientProps {
+  initialSubjects: Subjects[];
+  user: { id: string; role: string }; // Added `user` property
 }
 
-
-export default function AdminClient({initialSubjects}:AdminClientProps){
+export default function AdminClient({ initialSubjects, user }: AdminClientProps){
 
   
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [arrayOfURL, setArrayOfURL] = useState<string[]>([])
-//   const [fetchedExam, setFetchedExam] = useState(initialExams);
   const [subjectOptions, setSubjectOptions] = useState<subjectOptions[]>([])
   const [fetchedSubjects, setFetchedSubjects] = useState<Subjects[]>(initialSubjects);
   const [imageFile, setImageFile] = useState<FileList|{}>({});
   const [open, setOpen] = useState(false)
   const [photoUploaded, setPhotoUploaded] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const { data: session } = authClient.useSession();
-
-  const role = session?.user.role
-  const user_id = session?.user.id as string
+  const user_id = user.id; // Use `user.id` from props
 
   const [subjectLabel, setSubjectLabel] = useState("")
 
   const [formData, setFormData] = useState<Form_Data>({
-    subject_id:0,
+    subject_id:1,
     title:'',
     year:'2015',
     type:'final',
-    createdByUserId:user_id,
+    createdByUserId: user_id, // Use `user.id` from props
     imageURl:[]
   })
 
@@ -130,36 +117,38 @@ console.log(formData)
 
 //   }
 
-  async function handleFileUpload() {
-if(Object.keys(imageFile).length!=0){
-        for(const element of Object.values(imageFile)){
-          try{
-          const result = await PhotoUpload(element) 
-          if(result.success){
-            console.log(result.message)
-            console.log(result.imageUrl)
-            setArrayOfURL(prevArray=>[...prevArray,result.imageUrl])
+async function handleFileUpload() {
+  if (Object.keys(imageFile).length === 0) return; // Guard clause
 
-          }
+  const newImageUrls:string[] = []; // 1. Local array to hold results
 
-    setFormData((previous)=>({ 
-        ...previous,
-       imageURl:[
-        ...previous.imageURl,
-        result.imageUrl] 
+  try {
+    for (const element of Object.values(imageFile)) {
+      const result = await PhotoUpload(element);
+      
+      if (result.success) {
+        console.log("Uploaded:", result.imageUrl);
+        newImageUrls.push(result.imageUrl); // 2. Push to local array
+      }
     }
-))
-    setPhotoUploaded(true)
-          }catch(error){
-            console.log(error)
-          }
-        }
-}else{
-        console.log(
-          'hey'
-        )
+
+    // 3. Update state ONE time after the loop finishes
+    if (newImageUrls.length > 0) {
+      setArrayOfURL((prev) => [...prev, ...newImageUrls]);
+      
+      setFormData((prev) => ({
+        ...prev,
+        imageURl: [...prev.imageURl, ...newImageUrls],
+      }));
+      
+      setPhotoUploaded(true);
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
 }
-}
+
   const handleFileChange = () => {
       if (fileInputRef.current && fileInputRef.current.files) {
         const selectedFiles = fileInputRef.current.files;
@@ -169,9 +158,8 @@ if(Object.keys(imageFile).length!=0){
 
     const handleFormSubmit = async ()=>{
       try{
-        console.log(formData)
-    const {subject_id,title,year,type,createdByUserId} = formData
-    const exam_form = {subject_id, title, year, type, createdByUserId}
+      const {subject_id,title,year,type,createdByUserId,imageURl} = formData
+      const exam_form = {subject_id, title, year, type, createdByUserId,imageURl}
         const response = await fetch(`/api/exams`,{
           method:"POST",
           headers:{
@@ -181,11 +169,14 @@ if(Object.keys(imageFile).length!=0){
         })
 
         if(!response.ok){
+          console.log(response)
           throw new Error("failed to write project")
         }
         const id = await response.json()
         console.log(id)
        toast('Successfully added') 
+
+       resetAllData()
       }catch(error){
         if(error instanceof Error){
           console.log(`Error ${error.message}`)
@@ -194,6 +185,20 @@ if(Object.keys(imageFile).length!=0){
       }
       
     }
+
+   function resetAllData(){
+    setFormData({
+    subject_id:1,
+    title:'',
+    year:'2015',
+    type:'final',
+    createdByUserId:user_id,
+    imageURl:[]
+    })
+    setPhotoUploaded(false)
+
+
+   } 
     return (
         <div className="w-full max-w-md m-auto mt-20 space-y-6">
         <Button onClick={()=>router.push('/app/dashboard')}>Home</Button>
@@ -201,11 +206,10 @@ if(Object.keys(imageFile).length!=0){
         <FieldLegend>Image</FieldLegend>
          <Field>
          <div>
-          <form action={handleFormSubmit} className="w-full flex flex-col space-y-4">
+          <form onSubmit ={(e)=>{e.preventDefault();handleFormSubmit()}} className="w-full flex flex-col space-y-4">
       <Label htmlFor="picture">Picture</Label>
       <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} className="mb-4" />
-        <Button onClick={handleFileUpload} className="mb-4">Submit Photo</Button>
-
+        <Button type='button'onClick={handleFileUpload} className="mb-4">Submit Photo</Button>
  <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
@@ -213,6 +217,7 @@ if(Object.keys(imageFile).length!=0){
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between mb-4"
+          type='button'
         >
           {subjectLabel
             ? subjectOptions.find((subject) => subject.label === subjectLabel)?.label
@@ -292,7 +297,7 @@ if(Object.keys(imageFile).length!=0){
   </div>
 </RadioGroup>
 
-<Button type="submit" className="mt-6">Submit</Button>
+<Button disabled={!photoUploaded}  type="submit" className="mt-6">Submit</Button>
 </form>
     </div>
 
