@@ -11,12 +11,9 @@ export async function POST(req: NextRequest) {
     try {
         const inserted = await insertExam(data);
         const newExamId = inserted;
-
-
-
         if(imageURl && imageURl.length>0){
-    await Promise.all(imageURl.map((url:string)=>
-        insertExamImage({exam_id:newExamId,image_url:url})
+    await Promise.all(imageURl.map((url:string,key:number)=>
+        insertExamImage({exam_id:newExamId,image_url:url,page_number:key+1})
     ))}
         return NextResponse.json({ success: true, examId: newExamId });
     } catch (e) {

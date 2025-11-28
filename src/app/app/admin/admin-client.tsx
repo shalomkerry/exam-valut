@@ -6,7 +6,7 @@ import {  useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PhotoUpload } from "@/actions/UploadImage";
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {Form_Data,Subjects} from '@/types/types'
 
@@ -60,6 +60,9 @@ export default function AdminClient({ initialSubjects, user }: AdminClientProps)
   const [open, setOpen] = useState(false)
   const [photoUploaded, setPhotoUploaded] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [isSubmitted, setIsSubmitted] = useState(false); // Loading state
+  const [numberOfUploaded,setNumUploaded] = useState(0)
 
   const user_id = user.id; // Use `user.id` from props
 
@@ -121,32 +124,43 @@ console.log(formData)
 async function handleFileUpload() {
   if (Object.keys(imageFile).length === 0) return; // Guard clause
 
-  const newImageUrls:string[] = []; // 1. Local array to hold results
+  const newImageUrls: string[] = []; // Local array to hold results
+  setIsSubmitting(true); // Set loading state
 
   try {
     for (const element of Object.values(imageFile)) {
       const result = await PhotoUpload(element);
-      
+
       if (result.success) {
         console.log("Uploaded:", result.imageUrl);
-        newImageUrls.push(result.imageUrl); // 2. Push to local array
+        newImageUrls.push(result.imageUrl); // Push to local array
+        setNumUploaded(newImageUrls.length)
       }
     }
 
-    // 3. Update state ONE time after the loop finishes
+    // Update state ONE time after the loop finishes
     if (newImageUrls.length > 0) {
       setArrayOfURL((prev) => [...prev, ...newImageUrls]);
-      
+
       setFormData((prev) => ({
         ...prev,
         imageURl: [...prev.imageURl, ...newImageUrls],
       }));
-      
-      setPhotoUploaded(true);
-    }
 
+      setPhotoUploaded(true);
+      toast.success("Photos uploaded successfully!");
+    }
   } catch (error) {
     console.log(error);
+    toast.error("Failed to upload photos. Please try again.");
+  } finally {
+    if(fileInputRef.current){
+    fileInputRef.current.value='' 
+    }
+    setImageFile({}) 
+    setIsSubmitted(true)
+    setIsSubmitting(false); // Reset loading state
+    
   }
 }
 
@@ -161,7 +175,7 @@ async function handleFileUpload() {
       try{
       const {subject_id,title,year,type,createdByUserId,imageURl} = formData
       const exam_form = {subject_id, title, year, type, createdByUserId,imageURl}
-        const response = await fetch(`/api/exams`,{
+        const examResponse = await fetch(`/api/exams`,{
           method:"POST",
           headers:{
             "Content-Type":"application/json",
@@ -169,12 +183,21 @@ async function handleFileUpload() {
           body:JSON.stringify(exam_form)
         })
 
-        if(!response.ok){
-          console.log(response)
+        if(!examResponse.ok){
           throw new Error("failed to write project")
         }
-        const id = await response.json()
-        console.log(id)
+        const examId = await examResponse.json()
+
+      const ocrResponse = await fetch("/api/ocr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ examId }),
+      })
+      
+      if(!ocrResponse.ok){
+        throw new Error('Failed to extract ocr')
+      }
+      
        toast('Successfully added') 
 
        resetAllData()
@@ -199,7 +222,6 @@ async function handleFileUpload() {
     })
     setPhotoUploaded(false)
 
-
    } 
     return (
         <div className="w-full max-w-md m-auto mt-20 space-y-6">
@@ -211,7 +233,29 @@ async function handleFileUpload() {
           <form onSubmit ={(e)=>{e.preventDefault();handleFormSubmit()}} className="w-full flex flex-col space-y-4">
       <Label htmlFor="picture">Picture</Label>
       <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} className="mb-4" />
-        <Button type='button'onClick={handleFileUpload} className="mb-4">Submit Photo</Button>
+
+        <Button
+        type='button'
+    onClick={handleFileUpload}
+    className="mb-4"
+    disabled={isSubmitting || isSubmitted || Object.keys(imageFile).length === 0} // Disable if no files, submitting, or already submitted
+  >
+    {isSubmitting ? (
+      <>
+        <Loader2 className="animate-spin mr-2" /> Uploading... {numberOfUploaded}/{Object.keys(imageFile).length}
+      </>
+    ) : (
+      "Submit Photo"
+    )}
+  </Button>
+
+<div className="flex flex-wrap gap-2 mt-4">
+      {formData.imageURl.map((url, index) => (
+        <div key={index} className="w-16 h-16 border rounded overflow-hidden">
+          <img src={url} alt={`Uploaded ${index + 1}`} className="w-full h-full object-cover" />
+        </div>
+      ))}
+    </div>
  <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
@@ -305,7 +349,7 @@ async function handleFileUpload() {
 
         </Field>
       </FieldGroup>
-
+{/* Display uploaded images */}
     </div>
     )
 }
