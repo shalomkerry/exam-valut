@@ -29,10 +29,10 @@ return await db.query.exams.findMany()
 
 export async function loadSubjects() {
   const data =  getCachedSubjects()  
-  return data
+  return data 
 }
 
 export async function loadExams(){
-  const data =  getCachedSubjects()
+  const data =  getCachedExams()
   return data
 }

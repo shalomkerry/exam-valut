@@ -3,6 +3,7 @@ import { useState,useEffect } from "react";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import {Subjects} from "@/types/types"
+import {CirclePlus} from"lucide-react"
 
 interface DashboardClientProps{
     initialSubjects:Subjects[]
@@ -36,9 +37,9 @@ export default function DashboardClient({initialSubjects}:DashboardClientProps){
     </div>
 
     <nav className="flex gap-3 items-center">
-      {/* <button className="btn primary px-3 py-2" onClick={() => router.push("/app/dashboard/post")}>
-        + Post Exam
-      </button> */}
+      <button className="bg-slate-800 px-2 rounded-md py-2 flex gap-2" onClick={() => router.push("/app/upload")}>
+        <CirclePlus/> Post Exam
+      </button>
       <div className="w-9 h-9 rounded-full bg-amber-200 flex items-center justify-center" >
         <h1 className="text-center text-black text-xl">{userName[0]}</h1>
       </div>

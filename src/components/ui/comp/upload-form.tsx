@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Upload, X, FileImage, Loader2, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -33,6 +33,9 @@ export default function UploadForm({ courses }: UploadFormProps) {
       setFiles((prev) => [...prev, ...newFiles])
     }
   }
+  useEffect(()=>{
+    
+  },[])
 
   const removeFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
@@ -126,7 +129,9 @@ export default function UploadForm({ courses }: UploadFormProps) {
     )
   }
 
+
   return (
+    <div className="max-w-md m-auto w-[600px] px-12 py-3 rounded-md bg-slate-700">
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">{error}</div>}
 
@@ -165,23 +170,6 @@ export default function UploadForm({ courses }: UploadFormProps) {
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="semester">Semester</Label>
-          <Select name="semester" required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select semester" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Fall">Fall</SelectItem>
-              <SelectItem value="Spring">Spring</SelectItem>
-              <SelectItem value="Summer">Summer</SelectItem>
-              <SelectItem value="Winter">Winter</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Exam Type */}
       <div className="space-y-2">
         <Label htmlFor="examType">Exam Type</Label>
         <Select name="examType" required>
@@ -189,18 +177,18 @@ export default function UploadForm({ courses }: UploadFormProps) {
             <SelectValue placeholder="Select exam type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Midterm">Midterm</SelectItem>
+            <SelectItem value="midterm">Midterm</SelectItem>
             <SelectItem value="Final">Final</SelectItem>
             <SelectItem value="Quiz">Quiz</SelectItem>
-            <SelectItem value="Assignment">Assignment</SelectItem>
-            <SelectItem value="Other">Other</SelectItem>
           </SelectContent>
         </Select>
       </div>
+      </div>
 
-      {/* Title */}
+      {/* Exam Type */}
+
       <div className="space-y-2">
-        <Label htmlFor="title">Title (Optional)</Label>
+        <Label htmlFor="title">Title</Label>
         <Input type="text" name="title" placeholder="e.g., Midterm 1 - Solutions" />
       </div>
 
@@ -259,5 +247,7 @@ export default function UploadForm({ courses }: UploadFormProps) {
         )}
       </Button>
     </form>
+
+    </div>
   )
 }

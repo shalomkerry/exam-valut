@@ -14,8 +14,7 @@ export default async function UploadPage() {
   const courses = await getCourses()
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen min-w-screen  flex flex-col justify-center align-center bg-background">
 
       <main className="mx-auto max-w-2xl px-4 py-8">
         <div className="mb-8">
