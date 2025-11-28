@@ -1,8 +1,6 @@
 "use client"
-
 import type React from "react"
-
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Upload, X, FileImage, Loader2, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,36 +8,99 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import {Subjects} from "@/types/types"
-
-
-interface UploadFormProps {
-  courses: Subjects[]
+import { PhotoUpload } from "@/actions/UploadImage"
+import {Form_Data,Subjects} from '@/types/types'
+import { toast } from "sonner"
+type User = {
+id:string,
+role:string
 }
 
-export default function UploadForm({ courses }: UploadFormProps) {
+interface UploadFormProps {
+  subjects: Subjects[],
+  user:User
+
+}
+export default function UploadForm({ subjects,user }: UploadFormProps) {
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<string | null>(null)
   const [files, setFiles] = useState<File[]>([])
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [photoUploaded, setPhotoUploaded] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [isSubmitted, setIsSubmitted] = useState(false); // Loading state
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [imageFile, setImageFile] = useState<FileList|{}>({});
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files).filter(
-        (file) => file.type.startsWith("image/") || file.type === "application/pdf",
-      )
-      setFiles((prev) => [...prev, ...newFiles])
-    }
-  }
-  useEffect(()=>{
-    
-  },[])
+  const [formData, setFormData] = useState<Form_Data>({
+    subject_id:1,
+    title:'',
+    year:'2025',
+    type:'final',
+    createdByUserId: user.id,
+    status:'pending',
+    imageURl:[]
+  })
 
   const removeFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
   }
+  const handleFileChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
+      if (fileInputRef.current && fileInputRef.current.files) {
+        const selectedFiles = fileInputRef.current.files;
+        setImageFile(selectedFiles)
+
+        await handleFileUpload(selectedFiles)
+      }
+
+    };
+
+
+async function handleFileUpload(filesToUpload: FileList){
+  if (Object.keys(files).length === 0) return; // Guard clause
+
+  const newImageUrls: string[] = []; // Local array to hold results
+  setIsSubmitting(true); // Set loading state
+
+  try {
+    for (const element of Object.values(filesToUpload)) {
+      const result = await PhotoUpload(element);
+
+      if (result.success) {
+        console.log("Uploaded:", result.imageUrl);
+        newImageUrls.push(result.imageUrl); // Push to local array
+      }
+    }
+
+    // Update state ONE time after the loop finishes
+    if (newImageUrls.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        imageURl: [...prev.imageURl, ...newImageUrls],
+      }));
+
+      setPhotoUploaded(true);
+      toast.success("Photos uploaded successfully!");
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Failed to upload photos. Please try again.");
+  } finally {
+    if(fileInputRef.current && fileInputRef.current.value){
+      fileInputRef.current.value = ''
+    }
+    setImageFile({}) 
+    setIsSubmitted(true)
+    setIsSubmitting(false); // Reset loading state
+    
+  }
+}
+
+  useEffect(()=>{
+console.log(formData)
+console.log(typeof(files))
+  },[formData])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -47,68 +108,27 @@ export default function UploadForm({ courses }: UploadFormProps) {
     setError(null)
     setUploadProgress("Creating exam record...")
 
-    const formData = new FormData(e.currentTarget)
+    const form = new FormData(e.currentTarget)
 
     try {
-      // First, create the exam record
       const examResponse = await fetch("/api/exams", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          courseId: formData.get("courseId"),
-          year: formData.get("year"),
-          semester: formData.get("semester"),
-          examType: formData.get("examType"),
-          title: formData.get("title"),
+          subject_id: form.get("courseId"),
+          title: form.get("title"),
+          year: form.get("year"),
+          type: form.get("examType"),
+          createdByUserId:user.id,
+          imageUrl:formData.imageURl
         }),
       })
 
       if (!examResponse.ok) {
         throw new Error("Failed to create exam record")
       }
-
       const { examId } = await examResponse.json()
-
-      // Upload each file
-      for (let i = 0; i < files.length; i++) {
-        setUploadProgress(`Uploading page ${i + 1} of ${files.length}...`)
-
-        const fileFormData = new FormData()
-        fileFormData.append("file", files[i])
-        fileFormData.append("examId", examId.toString())
-        fileFormData.append("pageNumber", (i + 1).toString())
-
-        const uploadResponse = await fetch("/api/upload", {
-          method: "POST",
-          body: fileFormData,
-        })
-
-        if (!uploadResponse.ok) {
-          throw new Error(`Failed to upload page ${i + 1}`)
-        }
-      }
-
-      setUploadProgress("Extracting text with OCR...")
-      const ocrResponse = await fetch("/api/ocr", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ examId }),
-      })
-
-      if (!ocrResponse.ok) {
-        console.error("OCR processing failed but upload succeeded")
-      } else {
-        const ocrResult = await ocrResponse.json()
-        console.log(`OCR completed: ${ocrResult.pagesProcessed} pages processed, ${ocrResult.pagesFailed || 0} failed`)
-      }
-
-      setSuccess(true)
-      setUploadProgress(null)
-
-      // Redirect after success
-      setTimeout(() => {
-        router.push("/")
-      }, 2000)
+      console.log(examId)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed")
       setUploadProgress(null)
@@ -129,6 +149,39 @@ export default function UploadForm({ courses }: UploadFormProps) {
     )
   }
 
+const handleChange = (e:any)=>{
+ const {name,value} = e.target;
+ setFormData((prev)=>({
+  ...prev,
+  [name]:value
+}))
+  }
+  const handleTypeChange = (newTypeString:string)=>{
+    handleChange({
+      target:{
+        name:'examType',
+        value:newTypeString
+      }
+    })
+  }
+   const handleYearChange = (newYearValue:string)=>{
+    handleChange({
+      target:{
+        name:'year',
+        value:newYearValue
+      }
+    })
+   }
+
+  const handleSubjectChange = (selectedSubject:string)=>{
+    handleChange({
+      target:{
+        name:'subject_id',
+        value:Number(selectedSubject)
+      }
+    })
+  }
+
 
   return (
     <div className="max-w-md m-auto w-[600px] px-12 py-3 rounded-md bg-slate-700">
@@ -138,12 +191,12 @@ export default function UploadForm({ courses }: UploadFormProps) {
       {/* Course Selection */}
       <div className="space-y-2">
         <Label htmlFor="courseId">Course</Label>
-        <Select name="courseId" required>
+        <Select  onValueChange={handleSubjectChange} name='subject_id' required>
           <SelectTrigger>
             <SelectValue placeholder="Select a course" />
           </SelectTrigger>
           <SelectContent>
-            {courses.map((course) => (
+            {subjects.map((course) => (
               <SelectItem key={course.id} value={course.id.toString()}>
               {course.title}
               </SelectItem>
@@ -156,7 +209,7 @@ export default function UploadForm({ courses }: UploadFormProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="year">Year</Label>
-          <Select name="year" required>
+          <Select name="year" onValueChange={handleYearChange} required>
             <SelectTrigger>
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
@@ -172,7 +225,7 @@ export default function UploadForm({ courses }: UploadFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="examType">Exam Type</Label>
-        <Select name="examType" required>
+        <Select name="examType" onValueChange={handleTypeChange}required>
           <SelectTrigger>
             <SelectValue placeholder="Select exam type" />
           </SelectTrigger>
@@ -189,7 +242,7 @@ export default function UploadForm({ courses }: UploadFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="title">Title</Label>
-        <Input type="text" name="title" placeholder="e.g., Midterm 1 - Solutions" />
+        <Input type="text" name="title" onChange={handleChange} value={formData.title} placeholder="AAU-PSYCHOLOGY-MID-2025" />
       </div>
 
       {/* File Upload */}
@@ -201,7 +254,7 @@ export default function UploadForm({ courses }: UploadFormProps) {
             files.length > 0 ? "border-primary/50 bg-primary/5" : "hover:bg-muted",
           )}
         >
-          <input type="file" id="files" multiple accept="image/*" onChange={handleFileChange} className="hidden" />
+      <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} className="mb-4" />
           <label htmlFor="files" className="flex cursor-pointer flex-col items-center">
             <Upload className="h-10 w-10 text-muted-foreground" />
             <p className="mt-2 font-medium">Click to upload images</p>

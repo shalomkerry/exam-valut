@@ -1,18 +1,21 @@
-import Link from "next/link"
-import { GraduationCap, Upload } from "lucide-react"
-import { db } from "@/db"
+'use server'
 import { loadSubjects } from "@/actions/FetchSubjects"
 import UploadForm from "@/components/ui/comp/upload-form"
+import auth from "@/lib/auth/auth"
+import { headers } from "next/headers"
 
-async function getCourses() {
-  const courses = await loadSubjects()
-     return courses
-  
-}
 
 export default async function UploadPage() {
-  const courses = await getCourses()
+  const subjects = await loadSubjects()
+  // const {data:session} =  await auth.session()
 
+ const currentHeaders = await headers();
+ const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+ const user = session?.user 
+ ? {id:session.user.id,role:session.user.role}
+ : {id:'',role:''}
   return (
     <div className="min-h-screen min-w-screen  flex flex-col justify-center align-center bg-background">
 
@@ -26,7 +29,7 @@ export default async function UploadPage() {
 
 
       </main>
-      <UploadForm courses={courses}/>
+      <UploadForm subjects={subjects} user={user}/>
     </div>
   )
 }

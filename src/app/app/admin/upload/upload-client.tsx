@@ -40,18 +40,16 @@ export default function AdminClient(){
   
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [arrayOfURL, setArrayOfURL] = useState<string[]>([])
   const [subjectOptions, setSubjectOptions] = useState<subjectOptions[]>([])
   const [fetchedSubjects, setFetchedSubjects] = useState<Subjects[]>(subjects);
   const [imageFile, setImageFile] = useState<FileList|{}>({});
   const [open, setOpen] = useState(false)
   const [photoUploaded, setPhotoUploaded] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false); // Loading state
   const [numberOfUploaded,setNumUploaded] = useState(0)
   const user_id = user?.id as string; // Use `user.id` from props
-
   const [subjectLabel, setSubjectLabel] = useState("")
 
   const [formData, setFormData] = useState<Form_Data>({
@@ -125,8 +123,6 @@ async function handleFileUpload() {
 
     // Update state ONE time after the loop finishes
     if (newImageUrls.length > 0) {
-      setArrayOfURL((prev) => [...prev, ...newImageUrls]);
-
       setFormData((prev) => ({
         ...prev,
         imageURl: [...prev.imageURl, ...newImageUrls],
@@ -208,6 +204,7 @@ async function handleFileUpload() {
     setPhotoUploaded(false)
 
    } 
+   
 
    const handleYearChange = (newYearValue:string)=>{
     handleChange({
