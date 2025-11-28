@@ -1,5 +1,4 @@
 'use client'
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation";
 import {  useEffect, useRef, useState } from "react";
@@ -9,19 +8,6 @@ import { PhotoUpload } from "@/actions/UploadImage";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {Form_Data,Subjects} from '@/types/types'
-
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-  FieldTitle,
-  
-} from "@/components/ui/field"
 import {
   Command,
   CommandEmpty,
@@ -36,6 +22,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 
 
 type subjectOptions = {
@@ -71,7 +59,7 @@ export default function AdminClient({ initialSubjects, user }: AdminClientProps)
   const [formData, setFormData] = useState<Form_Data>({
     subject_id:1,
     title:'',
-    year:'2015',
+    year:'2025',
     type:'final',
     createdByUserId: user_id,
     status:'approved',
@@ -79,7 +67,6 @@ export default function AdminClient({ initialSubjects, user }: AdminClientProps)
   })
 
 const handleChange = (e:any)=>{
-console.log(e.target.value)
  const {name,value} = e.target;
  setFormData((prev)=>({
   ...prev,
@@ -188,15 +175,15 @@ async function handleFileUpload() {
         }
         const examId = await examResponse.json()
 
-      const ocrResponse = await fetch("/api/ocr", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ examId }),
-      })
+      // const ocrResponse = await fetch("/api/ocr", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ examId }),
+      // })
       
-      if(!ocrResponse.ok){
-        throw new Error('Failed to extract ocr')
-      }
+      // if(!ocrResponse.ok){
+      //   throw new Error('Failed to extract ocr')
+      // }
       
        toast('Successfully added') 
 
@@ -223,12 +210,18 @@ async function handleFileUpload() {
     setPhotoUploaded(false)
 
    } 
+
+   const handleYearChange = (newYearValue:string)=>{
+    handleChange({
+      target:{
+        name:'year',
+        value:newYearValue
+      }
+    })
+   }
     return (
         <div className="w-full max-w-md m-auto mt-20 space-y-6">
         <Button onClick={()=>router.push('/app/dashboard')}>Home</Button>
-        <FieldGroup>
-        <FieldLegend>Image</FieldLegend>
-         <Field>
          <div>
           <form onSubmit ={(e)=>{e.preventDefault();handleFormSubmit()}} className="w-full flex flex-col space-y-4">
       <Label htmlFor="picture">Picture</Label>
@@ -245,10 +238,9 @@ async function handleFileUpload() {
         <Loader2 className="animate-spin mr-2" /> Uploading... {numberOfUploaded}/{Object.keys(imageFile).length}
       </>
     ) : (
-      "Submit Photo"
+      "Upload Photo"
     )}
   </Button>
-
 <div className="flex flex-wrap gap-2 mt-4">
       {formData.imageURl.map((url, index) => (
         <div key={index} className="w-16 h-16 border rounded overflow-hidden">
@@ -303,19 +295,24 @@ async function handleFileUpload() {
 
     <Label htmlFor="title">Title</Label>
     <Input id="title" type="text" name='title' placeholder="AAU-PSYCHOLOGY-MID-2025" value={formData.title} onChange={handleChange} className="mb-4" />
-    <Label htmlFor="year">Year</Label>
-    <Input
-          type="number"
-          name="year"
-          id="year"
-          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-x-0 h-11 text-center text-sm text-white block w-full py-2.5 mb-4"
-          placeholder="2025"
-          value={formData.year}
-          onChange={handleChange}
-          min="2008"
-          max="2030"
-          required
-        />
+
+ <div className="space-y-2 flex flex-row gap-10 conetent-end  justify-center">
+    <div className="">
+            <Label htmlFor="year">Year</Label>
+            <Select name="year" value={formData.year} onValueChange={handleYearChange}required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select year" />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+    </div>
+    <div className="">
 
 <Label className="mt-2 font-medium">Exam Type</Label>
 <RadioGroup
@@ -342,13 +339,14 @@ async function handleFileUpload() {
     <Label htmlFor="r3">Quiz</Label>
   </div>
 </RadioGroup>
+    </div>
+
+        </div>
 
 <Button disabled={!photoUploaded}  type="submit" className="mt-6">Submit</Button>
 </form>
     </div>
 
-        </Field>
-      </FieldGroup>
 {/* Display uploaded images */}
     </div>
     )
