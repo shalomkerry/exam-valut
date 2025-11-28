@@ -4,6 +4,7 @@ export type Form_Data = {
     year:string,
     type:"final"|"quiz"|"midterm",
     createdByUserId:string,
+    status:'pending'| 'approved'| 'rejected',
     imageURl:string[]
 }
 

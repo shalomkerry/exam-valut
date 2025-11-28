@@ -5,13 +5,14 @@ import {
   timestamp,
   boolean,
   pgEnum,
-  jsonb
 } from 'drizzle-orm/pg-core';
 
 import { user_role_enum } from './auth_schema';
 
 export const exam_type_enum  = pgEnum('exam_type',['final','midterm','quiz'])
 export const edit_status_enum = pgEnum('edit_status', ['pending', 'approved', 'rejected']);
+export const ocr_stauts_enum = pgEnum('ocr_status', ['failed', 'pending', 'processing','compelted']);
+
 
 // --- Exams--
 
@@ -21,7 +22,7 @@ export const exams = pgTable('exams', {
   year: text('year').notNull(),
   type: exam_type_enum('type').notNull(),
   subject_id:integer('subject_id').notNull().references(()=>subjects.id),
-
+  status: edit_status_enum('status').notNull().default('pending'),
   created_at:timestamp('created_at',{ withTimezone: false }).notNull().defaultNow(),
   createdByUserId: text('created_by_user_id').references(() => user.id),
 });
@@ -51,32 +52,26 @@ image: text('image').notNull(),
 sub_code:text('sub_code').unique().notNull(),
 })
 
-
-
 // --- Exam Images Table ---
 export const examImages = pgTable('exam_images', {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   exam_id:integer('exam_id').references(()=>exams.id,{onDelete:'cascade'}).notNull(),
+  page_number:integer('page_number'),
   image_url: text('image_url'),
-  extracted_text:jsonb('extracted_text'),
+  extracted_text:text('extracted_text'),
+  ocr_stauts:ocr_stauts_enum('ocr_status').default('pending'),
+
 });
 
 // --- Edit ---
 export const edits = pgTable('edits', {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-
   user_id: text('user_id').notNull().references(() => user.id),
-
   exam_image_id: integer('exam_image_id').notNull().references(() => examImages.id),
-  content_before: jsonb('content_before').notNull(),
-
-  content_after: jsonb('content_after').notNull(),
-
+  content_before: text('content_before').notNull(),
+  content_after: text('content_after').notNull(),
   status: edit_status_enum('status').notNull().default('pending'),
-
   approved_by_user_id: text('approved_by_user_id'), // .references(() => user.id),
-
   created_at: timestamp('created_at', { withTimezone: false }).notNull().defaultNow(),
-
   processed_at: timestamp('processed_at', { withTimezone: false }),
 });

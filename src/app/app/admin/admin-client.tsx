@@ -70,7 +70,8 @@ export default function AdminClient({ initialSubjects, user }: AdminClientProps)
     title:'',
     year:'2015',
     type:'final',
-    createdByUserId: user_id, // Use `user.id` from props
+    createdByUserId: user_id,
+    status:'approved',
     imageURl:[]
   })
 
@@ -188,11 +189,12 @@ async function handleFileUpload() {
 
    function resetAllData(){
     setFormData({
-    subject_id:1,
+    subject_id:0,
     title:'',
     year:'2015',
     type:'final',
     createdByUserId:user_id,
+    status:'approved',
     imageURl:[]
     })
     setPhotoUploaded(false)
