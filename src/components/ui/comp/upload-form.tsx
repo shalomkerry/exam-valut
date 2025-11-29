@@ -104,7 +104,7 @@ console.log(typeof(files))
   },[formData])
 
   const handleFormSubmit = async () => {
-if(Object.entries(imageFile).length==0){
+if(formData.imageURl.length==0){
   Swal.fire({
   title: 'Error!',
   text: 'Please Upload Exam Images First',

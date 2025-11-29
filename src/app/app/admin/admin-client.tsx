@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button"
 import { AdminExamCard } from "@/components/ui/comp/admin-exam-card";
 import { useRouter } from "next/navigation"
-import { useEffect } from "react";
 
 type SinglePendingExam = {
   exam: {
@@ -24,7 +23,9 @@ type AdminClientProps = {
 
 export default function AdminClient({fetchedExams}:AdminClientProps){
   const router = useRouter()
-
+  fetchedExams.map((elements)=>{
+    console.log(elements.images)
+  })
     return (
       <>
         <Button onClick={()=>router.push('/app/dashboard')}>Home</Button>
@@ -33,7 +34,7 @@ export default function AdminClient({fetchedExams}:AdminClientProps){
 
         <div className="mt-4">
           {fetchedExams.map((examData:any) => (
-            <AdminExamCard key={examData.exam.id} exam={examData.exam} />
+            <AdminExamCard key={examData.exam.id} exam={examData.exam} images={examData.images} />
           ))} 
         </div>
       </>

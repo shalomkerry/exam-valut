@@ -6,17 +6,17 @@ import {Subjects} from "@/types/types"
 import {CirclePlus} from"lucide-react"
 
 interface DashboardClientProps{
-    initialSubjects:Subjects[]
+    initialSubjects:Subjects[],
+    user:any
 }
 
-export default function DashboardClient({initialSubjects}:DashboardClientProps){
+export default function DashboardClient({initialSubjects,user}:DashboardClientProps){
     const router = useRouter()
     const [subjects,setSubjects] = useState(initialSubjects)
     const [query, setQuery] = useState("");
     const [subjectFilter, setSubjectFilter] = useState("");
     const [typeFilter, setTypeFilter] = useState("");
-    const { data: session } = authClient.useSession();
-    const userName = session?.user?.name || session?.user?.email || "User";
+    const userName = user
   const filtered = subjects.filter((e:any) => {
     const q = query.trim().toLowerCase();
     if (q && !(`${e.title}`.toLowerCase().includes(q))) return false;

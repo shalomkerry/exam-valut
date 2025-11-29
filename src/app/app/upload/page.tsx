@@ -8,7 +8,6 @@ import Link from "next/link"
 
 export default async function UploadPage() {
   const subjects = await loadSubjects()
-  // const {data:session} =  await auth.session()
 
  const currentHeaders = await headers();
  const session = await auth.api.getSession({

@@ -16,7 +16,7 @@ type SinglePendingExam = {
     created_at: Date;
     createdByUserId: string | null;
   };
-  images: ExamImages[]
+  images: any
 };
 export default async function AdminPage(){
   const pendingExams:SinglePendingExam[] = await db

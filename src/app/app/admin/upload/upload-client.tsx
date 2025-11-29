@@ -38,7 +38,6 @@ type subjectOptions = {
 export default function AdminClient(){
   const {subjects,user} = useAdmin()
   
-  const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [subjectOptions, setSubjectOptions] = useState<subjectOptions[]>([])
   const [fetchedSubjects, setFetchedSubjects] = useState<Subjects[]>(subjects);

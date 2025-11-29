@@ -23,9 +23,10 @@ interface Exam {
 
 interface AdminExamCardProps {
   exam: Exam,
+  images:any
   showActions?: boolean
 }
-export function AdminExamCard({ exam, showActions = true }: AdminExamCardProps) {
+export function AdminExamCard({ exam, images, showActions = true }: AdminExamCardProps) {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<"approve" | "reject" | null>(null)
@@ -71,7 +72,7 @@ const id = exam.id
           <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <FileText className="h-4 w-4" />
-              {/* {image.length} pages */}
+              {images.length} pages
             </span>
             <span>Uploaded {new Date(exam.created_at).toLocaleDateString()}</span>
           </div>
