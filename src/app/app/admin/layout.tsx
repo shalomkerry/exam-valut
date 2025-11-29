@@ -20,6 +20,7 @@ export default async function AdminLayout({
  const user = session?.user 
  ? {id:session.user.id,role:session.user.role}
  : {id:'',role:''}
+ 
   // 2. Pass data to the Client Wrapper
   return (
     <div className="admin-layout-container">

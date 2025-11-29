@@ -5,8 +5,6 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type Exam = typeof exams.$inferSelect;
 type Subject = typeof subjects.$inferSelect;
-// 1. Define Types (Adjust these to match your Prisma/DB models)
-
 
 interface User {
   id: string;
@@ -51,8 +49,6 @@ export default function AdminClientWrapper({
   const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
   const [exams, setExams] = useState<Exam[]>(initialExams);
   
-  // Usually user data doesn't change instantly on client without a reload, 
-  // so we often don't need a setter for it, but you can add one if needed.
   const currentUser = user; 
 
   return (

@@ -8,6 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 
 import { user_role_enum } from './auth_schema';
+import { relations } from 'drizzle-orm';
 
 export const exam_type_enum  = pgEnum('exam_type',['final','midterm','quiz'])
 export const edit_status_enum = pgEnum('edit_status', ['pending', 'approved', 'rejected']);
@@ -75,3 +76,15 @@ export const edits = pgTable('edits', {
   created_at: timestamp('created_at', { withTimezone: false }).notNull().defaultNow(),
   processed_at: timestamp('processed_at', { withTimezone: false }),
 });
+
+export const examsRelations = relations(exams, ({ many }) => ({
+  images: many(examImages),
+}));
+
+// Define the Inverse: An Image belongs to One Exam
+export const examImagesRelations = relations(examImages, ({ one }) => ({
+  exam: one(exams, {
+    fields: [examImages.exam_id],
+    references: [exams.id],
+  }),
+}));
