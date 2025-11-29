@@ -1,6 +1,8 @@
 'use server'; 
+import { exams } from '@/db/data_schema';
 import { db } from '@/db/index';
 import { unstable_cache } from 'next/cache';
+import { eq } from 'drizzle-orm';
 
 const getCachedSubjects = unstable_cache(
   async ()=>{
@@ -26,6 +28,7 @@ return await db.query.exams.findMany()
     tags:['exams']
   }
 )
+
 
 export async function loadSubjects() {
   const data =  getCachedSubjects()  
