@@ -1,5 +1,4 @@
 "use client"
-import type React from "react"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Upload, X, FileImage, Loader2, CheckCircle } from "lucide-react"
@@ -11,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { PhotoUpload } from "@/actions/UploadImage"
 import {Form_Data,Subjects} from '@/types/types'
 import { toast } from "sonner"
+import Swal from 'sweetalert2'
 type User = {
 id:string,
 role:string
@@ -46,11 +46,10 @@ export default function UploadForm({ subjects,user }: UploadFormProps) {
   const removeFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
   }
-  const handleFileChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async () => {
       if (fileInputRef.current && fileInputRef.current.files) {
         const selectedFiles = fileInputRef.current.files;
         setImageFile(selectedFiles)
-
         await handleFileUpload(selectedFiles)
       }
 
@@ -58,7 +57,9 @@ export default function UploadForm({ subjects,user }: UploadFormProps) {
 
 
 async function handleFileUpload(filesToUpload: FileList){
-  if (Object.keys(files).length === 0) return; // Guard clause
+  console.log(filesToUpload)
+  if (Object.keys(filesToUpload).length === 0) return; // Guard clause
+  
 
   const newImageUrls: string[] = []; // Local array to hold results
   setIsSubmitting(true); // Set loading state
@@ -66,7 +67,7 @@ async function handleFileUpload(filesToUpload: FileList){
   try {
     for (const element of Object.values(filesToUpload)) {
       const result = await PhotoUpload(element);
-
+       setUploadProgress('Uploading Images')
       if (result.success) {
         console.log("Uploaded:", result.imageUrl);
         newImageUrls.push(result.imageUrl); // Push to local array
@@ -102,26 +103,27 @@ console.log(formData)
 console.log(typeof(files))
   },[formData])
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleFormSubmit = async () => {
+if(Object.entries(imageFile).length==0){
+  Swal.fire({
+  title: 'Error!',
+  text: 'Please Upload Exam Images First',
+  icon: 'error',
+  confirmButtonText: 'Okay 👍'
+})
+return
+}
     setIsSubmitting(true)
     setError(null)
     setUploadProgress("Creating exam record...")
-
-    const form = new FormData(e.currentTarget)
-
     try {
+      const {subject_id,title,year,type,createdByUserId,imageURl} = formData
+      const exam_form = {subject_id, title, year, type, createdByUserId,imageURl}
+console.log(exam_form)
       const examResponse = await fetch("/api/exams", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subject_id: form.get("courseId"),
-          title: form.get("title"),
-          year: form.get("year"),
-          type: form.get("examType"),
-          createdByUserId:user.id,
-          imageUrl:formData.imageURl
-        }),
+        body: JSON.stringify(exam_form),
       })
 
       if (!examResponse.ok) {
@@ -129,11 +131,13 @@ console.log(typeof(files))
       }
       const { examId } = await examResponse.json()
       console.log(examId)
+      toast('Successfully added') 
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed")
       setUploadProgress(null)
     } finally {
       setIsSubmitting(false)
+      resetAllData()
     }
   }
 
@@ -183,11 +187,50 @@ const handleChange = (e:any)=>{
   }
 
 
+   function resetAllData(){
+    setFormData({
+    subject_id:0,
+    title:'',
+    year:'2015',
+    type:'final',
+    createdByUserId:user.id,
+    status:'approved',
+    imageURl:[]
+    })
+    setPhotoUploaded(false)
+
+   } 
   return (
     <div className="max-w-md m-auto w-[600px] px-12 py-3 rounded-md bg-slate-700">
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={(e)=>{e.preventDefault();handleFormSubmit()}} className="space-y-6">
       {error && <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">{error}</div>}
 
+      <div className="space-y-2">
+        <Label>Exam Pages</Label>
+        <div
+          className={cn(
+            "rounded-lg border-2 border-dashed p-8 text-center transition-colors",
+            files.length > 0 ? "border-primary/50 bg-primary/5" : "hover:bg-muted",
+          )}
+        >
+      <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} className="mb-4" />
+          <label htmlFor="files" className="flex cursor-pointer flex-col items-center">
+            <Upload className="h-10 w-10 text-muted-foreground" />
+            <p className="mt-2 font-medium">Click to upload images</p>
+            <p className="mt-1 text-sm text-muted-foreground">PNG, JPG up to 10MB each</p>
+          </label>
+        </div>
+
+        {/* File List */}
+
+<div className="flex flex-wrap gap-2 mt-4">
+      {formData.imageURl.map((url, index) => (
+        <div key={index} className="w-16 h-16 border rounded overflow-hidden">
+          <img src={url} alt={`Uploaded ${index + 1}`} className="w-full h-full object-cover" />
+        </div>
+      ))}
+    </div>
+      </div>
       {/* Course Selection */}
       <div className="space-y-2">
         <Label htmlFor="courseId">Course</Label>
@@ -246,47 +289,10 @@ const handleChange = (e:any)=>{
       </div>
 
       {/* File Upload */}
-      <div className="space-y-2">
-        <Label>Exam Pages</Label>
-        <div
-          className={cn(
-            "rounded-lg border-2 border-dashed p-8 text-center transition-colors",
-            files.length > 0 ? "border-primary/50 bg-primary/5" : "hover:bg-muted",
-          )}
-        >
-      <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} className="mb-4" />
-          <label htmlFor="files" className="flex cursor-pointer flex-col items-center">
-            <Upload className="h-10 w-10 text-muted-foreground" />
-            <p className="mt-2 font-medium">Click to upload images</p>
-            <p className="mt-1 text-sm text-muted-foreground">PNG, JPG up to 10MB each</p>
-          </label>
-        </div>
-
-        {/* File List */}
-        {files.length > 0 && (
-          <div className="mt-4 space-y-2">
-            {files.map((file, index) => (
-              <div key={index} className="flex items-center justify-between rounded-lg border bg-card p-3">
-                <div className="flex items-center gap-3">
-                  <FileImage className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm font-medium">{file.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Page {index + 1} • {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                </div>
-                <Button type="button" variant="ghost" size="icon" onClick={() => removeFile(index)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
       {/* Submit */}
-      <Button type="submit" className="w-full" disabled={isSubmitting || files.length === 0}>
+
+      <Button type="submit" className="w-full" >
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -295,7 +301,7 @@ const handleChange = (e:any)=>{
         ) : (
           <>
             <Upload className="mr-2 h-4 w-4" />
-            Upload Exam ({files.length} page{files.length !== 1 ? "s" : ""})
+            Submit
           </>
         )}
       </Button>

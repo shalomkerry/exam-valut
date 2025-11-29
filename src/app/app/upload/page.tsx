@@ -3,6 +3,7 @@ import { loadSubjects } from "@/actions/FetchSubjects"
 import UploadForm from "@/components/ui/comp/upload-form"
 import auth from "@/lib/auth/auth"
 import { headers } from "next/headers"
+import Link from "next/link"
 
 
 export default async function UploadPage() {
@@ -30,6 +31,9 @@ export default async function UploadPage() {
 
       </main>
       <UploadForm subjects={subjects} user={user}/>
+      <Link href="/app/dashboard" className="text-blue-500 hover:underline">
+        &larr; Back to Home
+      </Link>
     </div>
   )
 }
