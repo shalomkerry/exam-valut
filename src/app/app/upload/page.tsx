@@ -23,7 +23,7 @@ export default async function UploadPage() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold">Upload Exam</h1>
           <p className="mt-2 text-muted-foreground">
-            Upload past exam papers to help fellow students. All uploads are reviewed before being published.
+            Upload past exam papers to help fellow students. All uploads are reviewed before being published on the site.
           </p>
         </div>
 

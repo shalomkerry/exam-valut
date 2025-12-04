@@ -89,13 +89,10 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
             <img src={exam.image} alt="" className="w-[300px] h-3/4"/>
             <div className="p-3 flex-1 flex flex-col gap-2">
               <h3 className="text-black font-bold leading-tight">{exam.title}</h3>
+                <button  className="w-full hover:cursor-pointer hover:scale-110  hover:inset-ring-2   bg-indigo-50 rounded-lg px-2 py-2 border-none text-black text-md  font-medium">
             <Link key={exam.id} href={`/app/subjects/${exam.id}`}>
            Go To individual page 
             </Link>
-                <button  onClick={()=>{
-                  router.push('/a')
-                }}className="w-full hover:cursor-pointer hover:scale-110  hover:inset-ring-2   bg-indigo-50 rounded-lg px-2 py-2 border-none text-black text-md  font-medium">
-                  Browse Exams
                 </button>
 
               </div>

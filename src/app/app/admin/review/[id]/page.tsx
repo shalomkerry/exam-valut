@@ -17,7 +17,6 @@ async function getExam(id: number) {
   return exam
 }
 
-// ---- Load pages for this exam ----
 async function getPages(examId: number) {
   return await db
     .select()

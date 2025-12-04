@@ -18,7 +18,6 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     }
 
    const response = await db.update(exams).set({status:'approved'}).where(eq(exams.id,examId)).returning()
-    console.log(response)
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Update exam error:", error)

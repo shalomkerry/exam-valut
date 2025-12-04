@@ -81,7 +81,6 @@ export const examsRelations = relations(exams, ({ many }) => ({
   images: many(examImages),
 }));
 
-// Define the Inverse: An Image belongs to One Exam
 export const examImagesRelations = relations(examImages, ({ one }) => ({
   exam: one(exams, {
     fields: [examImages.exam_id],

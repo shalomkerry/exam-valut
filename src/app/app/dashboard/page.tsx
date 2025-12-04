@@ -18,10 +18,6 @@ export default async function DashboardPage() {
  const session = await auth.api.getSession({
     headers: currentHeaders,
   });
-if(session?.user?.name){
- console.log(session?.user?.name)
-}
-
  const user = session?.user?.name || session?.user?.email || "User";
   return (
 <div className="p-6 max-w-6xl mx-auto">

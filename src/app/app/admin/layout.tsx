@@ -1,4 +1,3 @@
-// app/admin/layout.tsx
 import { loadExams, loadSubjects } from "@/actions/FetchSubjects";
 import auth from "@/lib/auth/auth";
 import { headers } from "next/headers";
@@ -9,8 +8,6 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 1. Fetch data on the Server
-  // These run in parallel for better performance
   const subjects = await loadSubjects()
   const exams = await loadExams()
  const currentHeaders = await headers();
