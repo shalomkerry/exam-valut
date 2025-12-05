@@ -26,6 +26,7 @@ export const exams = pgTable('exams', {
   status: edit_status_enum('status').notNull().default('pending'),
   created_at:timestamp('created_at',{ withTimezone: false }).notNull().defaultNow(),
   createdByUserId: text('created_by_user_id').references(() => user.id),
+  university:text('university').default('aau')
 });
 
 // --- User---

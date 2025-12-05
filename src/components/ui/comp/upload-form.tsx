@@ -40,7 +40,8 @@ export default function UploadForm({ subjects,user }: UploadFormProps) {
     type:'final',
     createdByUserId: user.id,
     status:'pending',
-    imageURl:[]
+    imageURl:[],
+    university:'aau'
   })
 
   const removeFile = (index: number) => {
@@ -195,7 +196,8 @@ const handleChange = (e:any)=>{
     type:'final',
     createdByUserId:user.id,
     status:'approved',
-    imageURl:[]
+    imageURl:[],
+    university:'aau'
     })
     setPhotoUploaded(false)
 

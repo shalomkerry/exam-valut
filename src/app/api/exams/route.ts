@@ -2,12 +2,12 @@ import { insertExam, insertExamImage } from "@/queries/Insert";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    const { subject_id, title, year, type, createdByUserId, imageURl } = await req.json();
+    const { subject_id, title, year, type,status, createdByUserId, imageURl} = await req.json();
 
     // Log the incoming payload
     console.log("Received payload:", { subject_id, title, year, type, createdByUserId, imageURl });
 
-    const data = { subject_id, title, year, type, createdByUserId };
+    const data = { subject_id, title, year, type,status, createdByUserId};
     try {
         const inserted = await insertExam(data);
         const newExamId = inserted;

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { CheckCircle, XCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 
 interface AdminReviewActionsProps {
   examId: number
@@ -24,7 +25,8 @@ export function AdminReviewActions({ examId }: AdminReviewActionsProps) {
       })
 
       if (response.ok) {
-        router.push("/app/admin/dashboard")
+       toast.success('exam added') 
+        router.push("/app/admin/")
         router.refresh()
       }
     } catch (error) {

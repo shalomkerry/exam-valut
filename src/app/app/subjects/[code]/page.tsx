@@ -2,7 +2,7 @@ import { db } from "@/db"
 import { examImages, exams, subjects } from "@/db/data_schema"
 import { eq,sql} from "drizzle-orm"
 import { notFound } from "next/navigation"
-import  ExamClient from "../exam-client"
+import  ExamClient from "./subject-client"
 
 async function getExam(id: number) {
   const examsWithImages = await db

@@ -1,4 +1,6 @@
 'use client'
+
+import { CirclePlus } from "lucide-react";
 import { useRouter } from "next/navigation"
 type exam = {
     exam: {
@@ -22,27 +24,34 @@ export default function ExamClient({exam}:ExamListProp){
     const router = useRouter()
     return(
     <div className="flex flex-col gap-4 mt-5 h-full">
-  <header className="flex items-center justify-between mb-6">
-
+  <header className="flex items-center justify-around mb-6">
     <div className="flex gap-4 items-center">
       <div className="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">
+        <button onClick={()=>{router.push('/app/dashboard')}}>
         EV
+        </button>
       </div>
-      <div className="font-bold text-lg">ExamVault</div>
     </div>
 
-    <nav className="flex gap-3 items-center">
+    <div className="flex gap-3 items-center">
       <button className="bg-slate-800 px-2 rounded-md py-2 flex gap-2" onClick={() => router.push("/app/upload")}>
+        <CirclePlus/> Post Exam
       </button>
-      <div className="w-9 h-9 rounded-full bg-amber-200 flex items-center justify-center" >
-      </div>
-
-    </nav>
+    </div>
   </header>
+    <div className="flex justify-center items-center mx-auto">
+
+    <h3> Number of Exams {exam.length}</h3>
+    </div>
         {exam.map((x: any, index: number) => (
           <div
             key={index}
-            className="p-2 border rounded-lg flex justify-evenly shadow hover:bg-gray-100 hover:text-black cursor-pointer"
+            className="p-4 border rounded-lg flex items-center justify-center gap-3 
+               shadow hover:bg-gray-100 hover:text-black cursor-pointer
+               mx-auto w-[30em]"
+            onClick={()=>{
+              router.push(`/app/subjects/${x.exam.subject_id}/exam/${x.exam.id}`)
+            }}
           >
             <h4 className="text-md font-bold">{x.exam.title}</h4>
             <p className="text-sm ">Year: {x.exam.year}</p>

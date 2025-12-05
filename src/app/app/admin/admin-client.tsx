@@ -13,6 +13,7 @@ type SinglePendingExam = {
     status: "pending" | "approved" | "rejected";
     created_at: Date;
     createdByUserId: string | null;
+    university:string|null
   };
   images: any
 };
@@ -27,17 +28,18 @@ export default function AdminClient({fetchedExams}:AdminClientProps){
     console.log(elements.images)
   })
     return (
-      <>
-        <Button onClick={()=>router.push('/app/dashboard')}>Home</Button>
-        <h1 className="text-blue-600">Welcome to the dashboard You fools</h1>
-        <button onClick={()=> router.push('/app/admin/upload')}>Upload</button>
-
+      <div className="w-full max-w-md m-auto mt-20 space-y-6">
+      <div className="flex justify-center align-center gap-5">
+        <button onClick={()=>router.push('/app/dashboard')}>Dashboard</button>
+        <Button onClick={()=> router.push('/app/admin/upload')}>Upload</Button>
+      </div>
+        <h1 className="text-blue-600 text-center">This is where you review stuff</h1>
         <div className="mt-4">
           {fetchedExams.map((examData:any) => (
             <AdminExamCard key={examData.exam.id} exam={examData.exam} images={examData.images} />
           ))} 
         </div>
-      </>
+      </div>
   ) 
 
 }

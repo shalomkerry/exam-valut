@@ -30,6 +30,6 @@
     ".next/dev/types/**/*.ts",
     "src/types/**/*.d.ts",
     "**/*.mts"
-  ],
+, "src/app/app/admin/not-found.jsx"  ],
   "exclude": ["node_modules"]
 }

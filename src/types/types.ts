@@ -5,7 +5,8 @@ export type Form_Data = {
     type:"final"|"quiz"|"midterm",
     createdByUserId:string,
     status:'pending'| 'approved'| 'rejected',
-    imageURl:string[]
+    imageURl:string[],
+    university:string, 
 }
 
 export type Exam_Data = {

@@ -58,7 +58,8 @@ export default function AdminClient(){
     type:'final',
     createdByUserId: user_id,
     status:'approved',
-    imageURl:[]
+    imageURl:[],
+    university:''
   })
 
 const handleChange = (e:any)=>{
@@ -153,8 +154,9 @@ async function handleFileUpload() {
 
     const handleFormSubmit = async ()=>{
       try{
-      const {subject_id,title,year,type,createdByUserId,imageURl} = formData
-      const exam_form = {subject_id, title, year, type, createdByUserId,imageURl}
+      const {subject_id,title,year,type,status,createdByUserId,imageURl} = formData
+      const approved='approved'
+      const exam_form = {subject_id, title, year, type, status,createdByUserId,imageURl}
         const examResponse = await fetch(`/api/exams`,{
           method:"POST",
           headers:{
@@ -198,7 +200,8 @@ async function handleFileUpload() {
     type:'final',
     createdByUserId:user_id,
     status:'approved',
-    imageURl:[]
+    imageURl:[],
+    university:''
     })
     setPhotoUploaded(false)
 
@@ -213,8 +216,16 @@ async function handleFileUpload() {
       }
     })
    }
+   const router = useRouter()
     return (
         <div className="w-full max-w-md m-auto mt-20 space-y-6">
+
+      <div className="flex justify-center align-center gap-5">
+        <button onClick={()=>router.push('/app/dashboard')}>Dashboard</button>
+        <Button onClick={()=> router.push('/app/admin')}>Review</Button>
+      </div>
+
+        <h1 className="text-blue-600">This is where you upload Stuff</h1>
          <div>
           <form onSubmit ={(e)=>{e.preventDefault();handleFormSubmit()}} className="w-full flex flex-col space-y-4">
       <Label htmlFor="picture">Picture</Label>
@@ -291,7 +302,11 @@ async function handleFileUpload() {
 
  <div className="space-y-2 flex flex-row gap-10 conetent-end  justify-center">
     <div className="">
-            <Label htmlFor="year">Year</Label>
+<div className="gap-2">
+    <Label htmlFor="title">University</Label>
+    <Input id="title" type="text" name='university' placeholder="aau" value={formData.university} onChange={handleChange} className="mb-4 my-2 w-20" />
+</div>
+            <Label htmlFor="year" className="my-2">Year</Label>
             <Select name="year" value={formData.year} onValueChange={handleYearChange}required>
               <SelectTrigger>
                 <SelectValue placeholder="Select year" />
@@ -307,7 +322,7 @@ async function handleFileUpload() {
     </div>
     <div className="">
 
-<Label className="mt-2 font-medium">Exam Type</Label>
+<Label className="my-2 font-medium">Exam Type</Label>
 <RadioGroup
   value={formData.type}
   onValueChange={(newValue) => {

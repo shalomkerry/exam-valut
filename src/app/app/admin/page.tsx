@@ -1,7 +1,10 @@
 import AdminClient from "./admin-client";
 import { db } from "@/db";
 import { exams, subjects ,examImages} from "@/db/data_schema";
+import auth from "@/lib/auth/auth";
 import { sql, desc, eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 
 export type ExamImages = typeof examImages.$inferSelect;
 
@@ -15,6 +18,7 @@ type SinglePendingExam = {
     status: "pending" | "approved" | "rejected";
     created_at: Date;
     createdByUserId: string | null;
+    university:string|null
   };
   images: any
 };
@@ -28,7 +32,16 @@ export default async function AdminPage(){
     .leftJoin(examImages, eq(examImages.exam_id, exams.id))
     .where(eq(exams.status, "pending"))
     .groupBy(exams.id);
-console.log(pendingExams)
+  
+ const currentHeaders = await headers();
+ const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+ const user = session?.user?.role || "admin";
+console.log(user)
+if(user!='admin'){
+  notFound()
+}
   return (
     <>
       <AdminClient fetchedExams={pendingExams} />
