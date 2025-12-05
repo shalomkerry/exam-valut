@@ -27,7 +27,7 @@ export default function ExamClient({exam}:ExamListProp){
   <header className="flex items-center justify-around mb-6">
     <div className="flex gap-4 items-center">
       <div className="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">
-        <button onClick={()=>{router.push('/app/dashboard')}}>
+        <button onClick={()=>{router.push('/dashboard')}}>
         EV
         </button>
       </div>

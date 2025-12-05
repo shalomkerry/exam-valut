@@ -30,8 +30,8 @@ export default function AdminClient({fetchedExams}:AdminClientProps){
     return (
       <div className="w-full max-w-md m-auto mt-20 space-y-6">
       <div className="flex justify-center align-center gap-5">
-        <button onClick={()=>router.push('/app/dashboard')}>Dashboard</button>
-        <Button onClick={()=> router.push('/app/admin/upload')}>Upload</Button>
+        <button onClick={()=>router.push('/dashboard')}>Dashboard</button>
+        <Button onClick={()=> router.push('/admin/upload')}>Upload</Button>
       </div>
         <h1 className="text-blue-600 text-center">This is where you review stuff</h1>
         <div className="mt-4">

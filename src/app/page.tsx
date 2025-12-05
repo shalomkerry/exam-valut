@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (session && !isPending) {
-      router.replace("/app/dashboard");
+      router.replace("/dashboard");
     }
   }, [session, isPending, router]);
 

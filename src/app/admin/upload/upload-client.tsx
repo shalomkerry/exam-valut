@@ -221,8 +221,8 @@ async function handleFileUpload() {
         <div className="w-full max-w-md m-auto mt-20 space-y-6">
 
       <div className="flex justify-center align-center gap-5">
-        <button onClick={()=>router.push('/app/dashboard')}>Dashboard</button>
-        <Button onClick={()=> router.push('/app/admin')}>Review</Button>
+        <button onClick={()=>router.push('/dashboard')}>Dashboard</button>
+        <Button onClick={()=> router.push('/admin')}>Review</Button>
       </div>
 
         <h1 className="text-blue-600">This is where you upload Stuff</h1>

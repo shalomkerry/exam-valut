@@ -79,7 +79,7 @@ const id = exam.id
         </div>
 
         <div className="flex items-center gap-2">
-          <Link href={`/app/admin/review/${exam.id}`}>
+          <Link href={`/admin/review/${exam.id}`}>
             <Button variant="outline" size="sm">
               <Eye className="mr-1 h-4 w-4" />
               Review

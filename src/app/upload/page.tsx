@@ -30,7 +30,7 @@ export default async function UploadPage() {
 
       </main>
       <UploadForm subjects={subjects} user={user}/>
-      <Link href="/app/dashboard" className="text-blue-500 hover:underline">
+      <Link href="/dashboard" className="text-blue-500 hover:underline">
         &larr; Back to Home
       </Link>
     </div>

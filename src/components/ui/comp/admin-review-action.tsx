@@ -25,8 +25,8 @@ export function AdminReviewActions({ examId }: AdminReviewActionsProps) {
       })
 
       if (response.ok) {
-       toast.success('exam added') 
-        router.push("/app/admin/")
+        toast.success('exam added') 
+        router.push("/admin/")
         router.refresh()
       }
     } catch (error) {

@@ -121,7 +121,7 @@ return
       const {subject_id,title,year,type,createdByUserId,imageURl} = formData
       const exam_form = {subject_id, title, year, type, createdByUserId,imageURl}
 console.log(exam_form)
-      const examResponse = await fetch("/api/exams", {
+      const examResponse = await fetch("api/exams", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(exam_form),
@@ -133,12 +133,12 @@ console.log(exam_form)
       const { examId } = await examResponse.json()
       console.log(examId)
       toast('Successfully added') 
+      resetAllData()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed")
       setUploadProgress(null)
     } finally {
       setIsSubmitting(false)
-      resetAllData()
     }
   }
 

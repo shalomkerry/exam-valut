@@ -34,7 +34,7 @@ export default function SignInPage() {
         setSuccess("Signed in successfully.");
         setEmail("");
         setPassword("");
-        router.push("/app/dashboard");
+        router.push("/dashboard");
       }
     } catch (err: any) {
       console.error(err);
