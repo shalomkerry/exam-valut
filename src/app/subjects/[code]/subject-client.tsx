@@ -1,6 +1,6 @@
 'use client'
-
 import { CirclePlus } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation"
 type exam = {
     exam: {
@@ -22,6 +22,7 @@ interface ExamListProp{
 
 export default function ExamClient({exam}:ExamListProp){
     const router = useRouter()
+    console.log(exam)
     return(
     <div className="flex flex-col gap-4 mt-5 h-full">
   <header className="flex items-center justify-around mb-6">
@@ -49,10 +50,11 @@ export default function ExamClient({exam}:ExamListProp){
             className="p-4 border rounded-lg flex items-center justify-center gap-3 
                shadow hover:bg-gray-100 hover:text-black cursor-pointer
                mx-auto w-[30em]"
-            onClick={()=>{
-              router.push(`/app/subjects/${x.exam.subject_id}/exam/${x.exam.id}`)
-            }}
           >
+
+            <Link  href={`/subjects/${x.exam.subject_id}/exams/${x.exam.id}`}>
+           Go To individual page 
+            </Link>
             <h4 className="text-md font-bold">{x.exam.title}</h4>
             <p className="text-sm ">Year: {x.exam.year}</p>
             <p className="text-sm ">Type: {x.exam.type}</p>
