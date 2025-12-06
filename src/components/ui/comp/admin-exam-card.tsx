@@ -45,20 +45,21 @@ const id = exam.id
       if (response.ok) {
         if(action=='approve'){
           const data = await response.json()
-          const {id} = data.data
-          console.log(data,id)
-          const ocrResponse = await fetch(`/api/ocr/${id}`,{
+          const {id} = data.data[0]
+          const ocrResponse = await fetch(`/api/ocr`,{
             method:'POST',
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({examId:id})
           })
             if(ocrResponse.ok){
-              toast.success('We did this')
             const ocrData = await ocrResponse.json()
-            console.log(ocrData) 
+            console.log(ocrData)
+            if(ocrData.data.success){
+              toast.success('text has been extracted')
+            }
             }
         }
-        // router.refresh()
+        router.refresh()
       }
     } catch (error) {
       console.error(`Failed to ${action} exam:`, error)

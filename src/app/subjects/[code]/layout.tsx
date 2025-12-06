@@ -33,7 +33,7 @@ export default async function Layout({ children, params }: {children:ReactNode, 
   const selected = Object.fromEntries(
     Object.entries(subject).filter(([_,v])=>v.id==subjectId)
   )
-  const title : string = selected[1].title 
+  const title : string = selected[1]?.title ||  ''
   return (
     <>
     <Header title={title}/>

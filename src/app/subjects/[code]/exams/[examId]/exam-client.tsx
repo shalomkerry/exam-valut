@@ -1,9 +1,14 @@
 'use client'
+
+import { ExamPageViewer } from "@/components/ui/comp/exam-page-viewer";
+
 interface ImageType 
     {   id:number;
             exam_id:number,
             image_url:string,
             ocr_status:string,
+
+            extracted_text:string,
             page_number:number
     }
 type exam = {
@@ -29,12 +34,7 @@ export default function ExamClient({exam}:ExamListProp){
 
 return(
 <>
-<h1>{exam[0].exam.title}</h1>
-{images.map((x:any,index)=>(
-    <div key={index} className="">
-    <img src={x.image_url} alt="" />
-    </div>
-))}
+<ExamPageViewer pages={exam[0].images} examTitle={exam[0].exam.title}/>
 </>
 ) 
 }

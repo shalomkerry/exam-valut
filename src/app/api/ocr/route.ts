@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing exam ID" }, { status: 400 })
     }
 
-    const pages = await db.select().from(examImages).where(eq(examImages.ocr_stauts,'pending'))    
+    const pages = await db.select().from(examImages).where(eq(examImages.id,examId))    
 
     let successCount = 0
     let failCount = 0

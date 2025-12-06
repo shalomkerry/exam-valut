@@ -11,7 +11,7 @@ interface Page {
   id: number
   page_number: number
   image_url: string
-  ocr_text: string | null
+  extracted_text: string | null
   ocr_status: string
 }
 
@@ -20,18 +20,31 @@ interface ExamPageViewerProps {
   examTitle: string
 }
 
+
+
+
 export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
+
+
   const [currentPage, setCurrentPage] = useState(0)
-
   const page = pages[currentPage]
-  const hasOcrText = page?.ocr_text && page.ocr_text.trim().length > 0
-
+  const hasOcrText = page?.extracted_text && page.extracted_text.trim().length > 0
   const goToPrevious = () => {
     setCurrentPage((prev) => Math.max(0, prev - 1))
   }
 
   const goToNext = () => {
     setCurrentPage((prev) => Math.min(pages.length - 1, prev + 1))
+  }
+
+  const handleCopy = async()=>{
+    try{
+      if(page.extracted_text){
+        await navigator.clipboard.writeText(page?.extracted_text);
+      }
+    }catch{
+
+    }
   }
 
   return (
@@ -43,6 +56,7 @@ export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
           Previous
         </Button>
 
+    <Button onClick={handleCopy}>Copy</Button>
         <div className="flex items-center gap-2">
           {pages.map((_, index) => (
             <button
@@ -95,7 +109,7 @@ export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
           <div className="rounded-lg border bg-card p-6">
             {hasOcrText ? (
               <div className="prose prose-sm max-w-none dark:prose-invert">
-                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed">{page.ocr_text}</pre>
+                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed">{page.extracted_text}</pre>
               </div>
             ) : (
               <div className="py-12 text-center">

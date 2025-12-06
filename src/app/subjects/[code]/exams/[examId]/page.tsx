@@ -22,6 +22,7 @@ interface ImageType
             exam_id:number,
             image_url:string,
             ocr_status:string,
+            ocr_text:string,
             page_number:number
     }
 type exam = {
