@@ -23,7 +23,6 @@ interface ExamListProp{
 export default function ExamClient({exam}:ExamListProp){
 
     const router = useRouter()
-    console.log(exam)
     return(
     <div className="flex flex-col gap-4 mt-5 h-full">
   <header className="flex items-center justify-around mb-6">

@@ -31,9 +31,8 @@ export default async function CoursePage({
     notFound()}
 
   const exam = await getExam(examId)
-  console.log(exam)
   if (!exam){
-notFound()
+      notFound()
   } 
 
 return (
