@@ -29,8 +29,9 @@ export default function ExamClient({exam}:ExamListProp){
 
 return(
 <>
+<h1>{exam[0].exam.title}</h1>
 {images.map((x:any,index)=>(
-    <div key={index}>
+    <div key={index} className="">
     <img src={x.image_url} alt="" />
     </div>
 ))}

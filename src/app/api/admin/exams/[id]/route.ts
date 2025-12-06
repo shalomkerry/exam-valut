@@ -16,9 +16,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (!["approved", "rejected"].includes(status)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 })
     }
-
-   const response = await db.update(exams).set({status:'approved'}).where(eq(exams.id,examId)).returning()
-    return NextResponse.json({ success: true })
+    const response = await db
+      .update(exams)
+      .set({ status })
+      .where(eq(exams.id, examId))
+      .returning({id:exams.id})
+    return NextResponse.json({ success: true, data: response })
   } catch (error) {
     console.error("Update exam error:", error)
     return NextResponse.json({ error: "Failed to update exam" }, { status: 500 })

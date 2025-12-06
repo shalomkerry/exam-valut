@@ -26,8 +26,8 @@ export function AdminReviewActions({ examId }: AdminReviewActionsProps) {
 
       if (response.ok) {
         toast.success('exam added') 
-        router.push("/admin/")
-        router.refresh()
+        // router.push("/admin/")
+        // router.refresh()
       }
     } catch (error) {
       console.error(`Failed to ${action} exam:`, error)

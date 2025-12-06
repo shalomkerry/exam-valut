@@ -25,21 +25,6 @@ export default function ExamClient({exam}:ExamListProp){
     const router = useRouter()
     return(
     <div className="flex flex-col gap-4 mt-5 h-full">
-  <header className="flex items-center justify-around mb-6">
-    <div className="flex gap-4 items-center">
-      <div className="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">
-        <button onClick={()=>{router.push('/dashboard')}}>
-        EV
-        </button>
-      </div>
-    </div>
-
-    <div className="flex gap-3 items-center">
-      <button className="bg-slate-800 px-2 rounded-md py-2 flex gap-2" onClick={() => router.push("/app/upload")}>
-        <CirclePlus/> Post Exam
-      </button>
-    </div>
-  </header>
     <div className="flex justify-center items-center mx-auto">
 
     <h3> Number of Exams {exam.length}</h3>

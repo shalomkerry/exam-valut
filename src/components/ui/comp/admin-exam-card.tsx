@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { exams,examImages } from "@/db/data_schema"
 import { db } from "@/db"
+import { toast } from "sonner"
 
 export type ExamImages = typeof examImages.$inferSelect;
 
@@ -42,7 +43,18 @@ const id = exam.id
       })
 
       if (response.ok) {
-        router.refresh()
+        if(action=='approve'){
+          const data = await response.json()
+          const {id} = data.data
+          console.log(id)
+          const ocrResponse = await fetch(`/api/ocr/${id}`)
+            if(ocrResponse.ok){
+              toast.success('We did this')
+            const ocrData = await ocrResponse.json()
+            console.log(ocrData) 
+            }
+        }
+        // router.refresh()
       }
     } catch (error) {
       console.error(`Failed to ${action} exam:`, error)

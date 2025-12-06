@@ -2,7 +2,8 @@ import { ReactNode } from "react";
 import { db } from "@/db";
 import { eq, sql } from "drizzle-orm";
 import { exams, examImages } from "@/db/data_schema";
-
+import { loadSubjects } from "@/actions/FetchSubjects";
+import Header from "./header";
 
 // Fetches all exams for a specific Subject ID
 async function getSubjectExams(subjectId: number) {
@@ -19,22 +20,23 @@ async function getSubjectExams(subjectId: number) {
 
   return examsWithImages;
 }
-
 export default async function Layout({ children, params }: {children:ReactNode,  params: Promise<{ code: string }>}) {
-  // Assuming 'code' in the URL represents the Subject ID
   const { code } = await params;
-  console.log(code)
   const subjectId = Number(code);
-
   if (isNaN(subjectId)) {
     return <div>Invalid Subject ID</div>;
   }
 
   const examData = await getSubjectExams(subjectId) 
-
+  const subject = await loadSubjects()
+  console.log(subject)
+  const selected = Object.fromEntries(
+    Object.entries(subject).filter(([_,v])=>v.id==subjectId)
+  )
+  const title : string = selected[1].title 
   return (
     <>
-    <h1>All of them will have this</h1>
+    <Header title={title}/>
     {children}
     </>
   );
