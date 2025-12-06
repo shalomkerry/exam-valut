@@ -2,6 +2,7 @@
 import { CirclePlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
+
 type exam = {
     exam: {
         id: number;
@@ -19,8 +20,8 @@ type exam = {
 interface ExamListProp{
     exam:exam[]
 }
-
 export default function ExamClient({exam}:ExamListProp){
+
     const router = useRouter()
     console.log(exam)
     return(
