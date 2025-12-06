@@ -46,8 +46,12 @@ const id = exam.id
         if(action=='approve'){
           const data = await response.json()
           const {id} = data.data
-          console.log(id)
-          const ocrResponse = await fetch(`/api/ocr/${id}`)
+          console.log(data,id)
+          const ocrResponse = await fetch(`/api/ocr/${id}`,{
+            method:'POST',
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({examId:id})
+          })
             if(ocrResponse.ok){
               toast.success('We did this')
             const ocrData = await ocrResponse.json()

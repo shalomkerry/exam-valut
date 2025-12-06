@@ -194,7 +194,7 @@ async function handleFileUpload() {
 
    function resetAllData(){
     setFormData({
-    subject_id:0,
+    subject_id:1,
     title:'',
     year:'2015',
     type:'final',
