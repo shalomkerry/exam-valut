@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import { db } from "@/db";
 import { eq, sql } from "drizzle-orm";
 import { exams, examImages } from "@/db/data_schema";
-import SubjectClientWrapper from "./SubjectClientWrapper";
 
 
 // Fetches all exams for a specific Subject ID
@@ -31,11 +30,12 @@ export default async function Layout({ children, params }: {children:ReactNode, 
     return <div>Invalid Subject ID</div>;
   }
 
-  const examData = await getSubjectExams(subjectId);
+  const examData = await getSubjectExams(subjectId) 
 
   return (
-    <SubjectClientWrapper initialExams={examData}>
-      {children}
-    </SubjectClientWrapper>
+    <>
+    <h1>All of them will have this</h1>
+    {children}
+    </>
   );
 }

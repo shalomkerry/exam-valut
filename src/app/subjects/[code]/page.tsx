@@ -1,31 +1,44 @@
-"use client";
+import { db } from "@/db"
+import { examImages, exams, subjects } from "@/db/data_schema"
+import { eq,sql} from "drizzle-orm"
+import { notFound } from "next/navigation"
+import  ExamClient from "./subject-client"
 
-import { useSubjectExams } from "./SubjectClientWrapper";
+async function getExam(id: number) {
+  const examsWithImages = await db
+  .select({
+    exam: exams,
+    images: sql`json_agg(${examImages}.*)`.as("images"),
+  })
+  .from(exams)
+  .leftJoin(examImages, eq(examImages.exam_id, exams.id))
+  .where(eq(exams.subject_id, id))
+  .groupBy(exams.id);
 
-export default function SubjectExamsPage() {
-  // 1. Access the data from the context provided by Layout
-  const { exams } = useSubjectExams();
+  return examsWithImages
+}
 
-  if (!exams || exams.length === 0) {
-    return <div className="p-4">No exams found for this subject.</div>;
-  }
+export default async function CoursePage({
+  params,
+}: {
+  params: Promise<{ code: string }>
+}) {
+  const { code } = await params
+  const examId = Number.parseInt(code)
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Subject Exams</h1>
-      
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {exams.map((item) => (
-          <div key={item.exam.id} className="border rounded-lg p-4 shadow hover:shadow-md transition">
-            <h2 className="font-semibold text-lg">{item.exam.title}</h2>
-            <div className="text-sm text-gray-600">
-              <p>Year: {item.exam.year}</p>
-              <p>Type: {item.exam.type}</p>
-              <p>Images: {Array.isArray(item.images) ? item.images.length : 0}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+  if (isNaN(examId)){
+    console.log('yo hoo')
+    notFound()}
+
+  const exam = await getExam(examId)
+  console.log(exam)
+  if (!exam){
+notFound()
+  } 
+
+return (
+    <>
+    <ExamClient exam={exam}/>
+    </>
   );
 }
