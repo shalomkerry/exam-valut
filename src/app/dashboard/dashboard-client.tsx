@@ -4,6 +4,7 @@ import { authClient } from "@/lib/auth/auth-client";
 import { useRouter} from "next/navigation";
 import {Subjects} from "@/types/types"
 import {CirclePlus } from"lucide-react"
+import {Search } from"lucide-react"
 import Link from "next/link";
 interface DashboardClientProps{
     initialSubjects:Subjects[],
@@ -52,8 +53,8 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
     </p>
   </section>
 
-  <section className="mb-6 flex items-center justify-center">
-    <div className="flex justify-center z-20 overflow-hidden gap-3 w-[800px] items-center border-soli border-[#EFEAEA] border-2 rounded-2xl bg-[#010206] ">
+  <section className="mb-12 flex items-center justify-center">
+    <div className="flex justify-center z-20 overflow-hidden gap-3 w-[800px] items-center border-solid bg-blend-darken shadow-[12px_10bpx_13.3px_2px_rgba(177,177,177,0.25)] border-[#EFEAEA] border-2 rounded-2xl bg-[#010206] ">
       <select 
         value={subjectFilter} 
         onChange={(e) => setSubjectFilter(e.target.value)}
@@ -71,6 +72,7 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="bg-transparent border-none outline-none w-full"/>
+          <Search className="w-16 mr-2"/>
     </div>
   </section>
 
