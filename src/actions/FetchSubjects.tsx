@@ -6,7 +6,6 @@ import { eq } from 'drizzle-orm';
 
 const getCachedSubjects = unstable_cache(
   async ()=>{
-console.log('Fetching Subjects from DB')
 return await db.query.subjects.findMany()
   },
   ['subjects-list'],

@@ -23,6 +23,6 @@ export default async function DashboardPage() {
 <div className="p-6 max-w-6xl mx-auto">
   
 <DashboardClient initialSubjects={subjects} user={user}/>
-
-</div>  );
+</div>  
+);
 }

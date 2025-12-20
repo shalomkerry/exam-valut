@@ -4,7 +4,8 @@ import { eq, sql } from "drizzle-orm";
 import { exams, examImages } from "@/db/data_schema";
 import { loadSubjects } from "@/actions/FetchSubjects";
 import Header from "./header";
-
+import auth from "@/lib/auth/auth";
+import { headers } from "next/headers";
 // Fetches all exams for a specific Subject ID
 async function getSubjectExams(subjectId: number) {
   const examsWithImages = await db
@@ -29,15 +30,23 @@ export default async function Layout({ children, params }: {children:ReactNode, 
 
   const examData = await getSubjectExams(subjectId) 
   const subject = await loadSubjects()
-  console.log(subject)
+ const currentHeaders = await headers();
+ const session = await auth.api.getSession({
+    headers: currentHeaders,
+  });
+ const user = session?.user?.name || session?.user?.email || "User";
   const selected = Object.fromEntries(
     Object.entries(subject).filter(([_,v])=>v.id==subjectId)
   )
-  const title : string = selected[1]?.title ||  ''
+
+ const [selectedId] = Object.entries(selected)
+ const ID = selectedId[1].title
+  const title : string = ID ||  'Course Title'
   return (
-    <>
-    <Header title={title}/>
+<div className="p-6 max-w-6xl mx-auto">
+    <Header user={user} />
+    <h1 className="text-2xl font-bold text-center my-4">{title}</h1>
     {children}
-    </>
+    </div>
   );
 }

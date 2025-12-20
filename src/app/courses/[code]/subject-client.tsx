@@ -1,8 +1,8 @@
 'use client'
+import HeaderComponent from "@/components/ui/comp/header";
 import { CirclePlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
-
 type exam = {
     exam: {
         id: number;
@@ -25,10 +25,13 @@ export default function ExamClient({exam}:ExamListProp){
     const router = useRouter()
     return(
     <div className="flex flex-col gap-4 mt-5 h-full">
-    <div className="flex justify-center items-center mx-auto">
+    
+      <div className="m-auto border border-t-12 flex justify-between">
+        <p>12 Exams</p>
+        
+      </div>
 
-    <h3> Number of Exams {exam.length}</h3>
-    </div>
+
         {exam.map((x: any, index: number) => (
           <div
             key={index}
@@ -37,7 +40,7 @@ export default function ExamClient({exam}:ExamListProp){
                mx-auto w-[30em]"
           >
 
-            <Link  href={`/subjects/${x.exam.subject_id}/exams/${x.exam.id}`}>
+            <Link  href={`/courses/${x.exam.subject_id}/exams/${x.exam.id}`}>
            Go To individual page 
             </Link>
             <h4 className="text-md font-bold">{x.exam.title}</h4>
