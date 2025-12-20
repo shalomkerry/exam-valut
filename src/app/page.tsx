@@ -30,7 +30,6 @@ export default function Home() {
     );
   }
 
-  // Not signed in: show a minimal prompt with a sign-in link
   return (
     <main className="flex items-center justify-center h-screen">
       <div className="text-center">

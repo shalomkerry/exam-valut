@@ -56,9 +56,8 @@ export default async function ReviewPage({
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
-        {/* Back Link */}
         <Link
-          href="/app/admin"
+          href="/admin"
           className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />

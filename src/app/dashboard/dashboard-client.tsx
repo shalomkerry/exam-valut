@@ -30,16 +30,16 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
   <header className="flex items-center justify-between mb-6">
 
     <div className="flex gap-4 items-center">
-      <div className="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">
+      <div className="w-10 h-10 rounded-lg bg-[#666363] flex items-center justify-center text-white font-bold">
         EV
       </div>
       <div className="font-bold text-lg">ExamVault</div>
     </div>
 
-    <nav className="flex gap-3 items-center">
       <button className="bg-slate-800 px-2 rounded-md py-2 flex gap-2" onClick={() => router.push("/upload")}>
         <CirclePlus/> Post Exam
       </button>
+    <nav className="flex gap-3 items-center justify-center">
       <div className="w-9 h-9 rounded-full bg-amber-200 flex items-center justify-center" >
         <h1 className="text-center text-black text-xl">{userName[0]}</h1>
       </div>
@@ -52,32 +52,25 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
     </p>
   </section>
 
-  <section className="mb-6">
-    <div className="flex gap-3 items-center">
-      <input
-        aria-label="Search exams"
-        placeholder="Search by subject, course code, or exam type..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="flex-1 px-4 py-3 rounded-lg border border-gray-200 shadow-sm dark:text-black"
-      />
-    </div>
-
-    <div className="flex gap-3 mt-3">
+  <section className="mb-6 flex items-center justify-center">
+    <div className="flex justify-center z-20 overflow-hidden gap-3 w-[800px] items-center border-soli border-[#EFEAEA] border-2 rounded-2xl bg-[#010206] ">
       <select 
         value={subjectFilter} 
         onChange={(e) => setSubjectFilter(e.target.value)}
-        className="px-3 py-2 rounded-lg border border-gray-200"
+        className="px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none w-40 bg-[#666363]"
       >
-        <option value="">Subject</option>
-        <option>Computer Science</option>
-        <option>Chemistry</option>
-        <option>Economics</option>
+        <option value="">Subjects {subjects.length}</option>
+
+        {subjects.map((exam:any)=>(
+          <option value={`${exam.title}`}>{exam.title}</option>
+        ))}
       </select>
-      <button className="btn px-3 py-2 secondary hover:scale-105" onClick={() =>{setQuery("");setSubjectFilter('')}}>
-        
-        Reset
-      </button>
+      <input
+        aria-label="Search exams"
+        placeholder="Search by subject"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="bg-transparent border-none outline-none w-full"/>
     </div>
   </section>
 

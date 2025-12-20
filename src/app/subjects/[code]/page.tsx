@@ -1,6 +1,6 @@
 import { db } from "@/db"
 import { examImages, exams, subjects } from "@/db/data_schema"
-import { eq,sql} from "drizzle-orm"
+import {    and, eq,sql} from "drizzle-orm"
 import { notFound } from "next/navigation"
 import  ExamClient from "./subject-client"
 
@@ -12,7 +12,12 @@ async function getExam(id: number) {
   })
   .from(exams)
   .leftJoin(examImages, eq(examImages.exam_id, exams.id))
-  .where(eq(exams.subject_id, id))
+  .where(
+    and(
+    eq(exams.subject_id, id),
+    eq(exams.status,'approved')
+    )
+  )
   .groupBy(exams.id);
 
   return examsWithImages

@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation"
 import { CheckCircle, XCircle, Eye, Loader2, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { exams,examImages } from "@/db/data_schema"
-import { db } from "@/db"
+import { examImages } from "@/db/data_schema"
 import { toast } from "sonner"
 
 export type ExamImages = typeof examImages.$inferSelect;

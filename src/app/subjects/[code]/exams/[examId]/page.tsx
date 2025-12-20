@@ -17,12 +17,14 @@ async function getExam(id: number) {
   return examsWithImages;
 }
 
+
 interface ImageType 
     {   id:number;
             exam_id:number,
             image_url:string,
             ocr_status:string,
-            ocr_text:string,
+
+            extracted_text:string,
             page_number:number
     }
 type exam = {
@@ -39,6 +41,7 @@ type exam = {
     images:ImageType [
     ];
 }
+
 
 export default async function CoursePage({
   params,
