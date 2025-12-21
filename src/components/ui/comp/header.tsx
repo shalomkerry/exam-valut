@@ -18,13 +18,8 @@ export default function HeaderComponent({user}:HeaderProp){
       <button className="bg-slate-800 px-2 rounded-md py-2 flex gap-2" onClick={() => router.push("/upload")}>
         <CirclePlus/> Post Exam
       </button>
-      {/* <Link  href={`/${main}`}>
-        Go Back
-      </Link> */}
-      <button>
-      </button>
     <nav className="flex gap-3 items-center justify-center">
-      <div className="w-9 h-9 rounded-full bg-amber-200 flex items-center justify-center" >
+      <div className="w-9 h-9 rounded-full bg-slate-400 flex items-center justify-center" >
         <h1 className="text-center text-black text-xl">{user[0]}</h1>
       </div>
     </nav>

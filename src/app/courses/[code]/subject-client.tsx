@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Calendar, File, ChevronLeft, ChevronRight } from "lucide-react";
 import EmptyExamsCard from "@/components/ui/comp/empty-exams-card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type exam = {
     exam: {
@@ -22,15 +23,17 @@ interface ExamListProp{
     exam:exam[]
 }
 export default function ExamClient({exam}:ExamListProp){
-  const [filterByYear,setFilterByYear] = useState('')
-  const [filterByType,setFilterByType] = useState('')
+  const DEFAULT_YEAR = 'all-year'
+  const DEFAULT_TYPE = 'all-type'
+  const [filterByYear,setFilterByYear] = useState(DEFAULT_YEAR)
+  const [filterByType,setFilterByType] = useState(DEFAULT_TYPE)
   const [page,setPage] = useState(1)
 
   const ITEMS_PER_PAGE = 12;
 
   const resetFilters = () => {
-    setFilterByYear('');
-    setFilterByType('');
+    setFilterByYear(DEFAULT_YEAR);
+    setFilterByType(DEFAULT_TYPE);
   };
 
   const years = useMemo(() => Array.from(new Set(exam.map((e) => e.exam.year))).sort(), [exam]);
@@ -39,8 +42,8 @@ export default function ExamClient({exam}:ExamListProp){
   const filteredExam = useMemo(
     () =>
       exam.filter((e) => {
-        const matchYear = filterByYear ? e.exam.year === filterByYear : true;
-        const matchType = filterByType ? e.exam.type === filterByType : true;
+        const matchYear = filterByYear !== DEFAULT_YEAR ? e.exam.year === filterByYear : true;
+        const matchType = filterByType !== DEFAULT_TYPE ? e.exam.type === filterByType : true;
         return matchYear && matchType;
       }),
     [exam, filterByYear, filterByType]
@@ -64,33 +67,38 @@ export default function ExamClient({exam}:ExamListProp){
     <div className="flex flex-col gap-4 mt-5 h-full">
       <div className="m-auto border border-t-12 rounded-lg border-[#FFFFFF] border-b-0 border-t-0  px-3 flex gap-5 items-center">
         <p>{exam.length} exam{exam.length>1?<span>s</span>:''}</p>
-    <div className="flex gap-2 px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none bg-[#1E1E1E]">
-     <Calendar />
-      <select 
-        value={filterByYear} 
-        onChange={(e) => setFilterByYear(e.target.value)}
-        className="bg-[#1E1E1E] outline-none border-none"
-      >
-        <option value="">
-          Year</option>
-        {years.map((year)=>(
-          <option  key={year} value={year}>{year}</option>
-        ))}
-      </select>
-      </div>
-    <div className="flex gap-2 px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none bg-[#1E1E1E]">
-      <File className="h-23"/>
-      <select 
-        value={filterByType} 
-        onChange={(e) => setFilterByType(e.target.value)}
-        className="bg-[#1E1E1E] outline-none border-none"
-      >
-        <option value="">Type</option>
-        {types.map((type)=>(
-          <option  key={type} value={type}>{type}</option>
-        ))}
-      </select>
-      </div>
+    <div className="flex px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none bg-[#1E1E1E] items-center gap-2">
+      <Calendar />
+      <Select value={filterByYear} onValueChange={(val) => setFilterByYear(val)}>
+        <SelectTrigger className="bg-[#1E1E1E] border-none shadow-none px-2 py-1">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="bg-[#1E1E1E]">
+          <SelectItem className="py-2 pl-3 pr-8" value={DEFAULT_YEAR}>Year</SelectItem>
+          {years.map((year) => (
+            <SelectItem className="py-2 pl-3 pr-8" key={year} value={year}>
+              {year}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <div className="flex gap-2 px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none bg-[#1E1E1E] items-center">
+      <File className="h-23" />
+      <Select value={filterByType} onValueChange={(val) => setFilterByType(val)}>
+        <SelectTrigger className="bg-[#1E1E1E] border-none shadow-none px-2 py-1">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="bg-[#1E1E1E]">
+          <SelectItem className="py-2 pl-3 pr-8" value={DEFAULT_TYPE}>Type</SelectItem>
+          {types.map((type) => (
+            <SelectItem className="py-2 pl-3 pr-8 capitalize" key={type} value={type}>
+              {type}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
          <button
            className="ml-3 rounded-lg bg-slate-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-600"
            onClick={resetFilters}
@@ -112,7 +120,7 @@ export default function ExamClient({exam}:ExamListProp){
                 return (
                   <li
                     key={x.exam.id}
-                    className="rounded-md border border-transparent bg-[#222222] px-4 py-3 shadow transition hover:-translate-y-0.5 hover:border-indigo-400 hover:shadow-indigo-400/20"
+                    className="rounded-md border border-transparent bg-[#222222] px-4 py-3 shadow transition hover:-translate-y-0.5 hover:border-slate-500 hover:shadow-indigo-400/20"
                   >
 
                     <Link className="text-indigo-300 hover:text-indigo-200" href={`/courses/${x.exam.subject_id}/exams/${x.exam.id}`}>

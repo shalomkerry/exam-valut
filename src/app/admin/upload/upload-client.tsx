@@ -98,11 +98,6 @@ setFormData((previous)=>({
 console.log(formData)
     },[formData])
 
-//   if(role !='admin'){ return<>
-//    u not an admin 
-//     </>
-
-//   }
 
 async function handleFileUpload() {
   if (Object.keys(imageFile).length === 0) return; // Guard clause
@@ -222,7 +217,9 @@ async function handleFileUpload() {
 
       <div className="flex justify-center align-center gap-5">
         <button onClick={()=>router.push('/dashboard')}>Dashboard</button>
+        {user?.role=='admin'?
         <Button onClick={()=> router.push('/admin')}>Review</Button>
+        :''}
       </div>
 
         <h1 className="text-blue-600">This is where you upload Stuff</h1>

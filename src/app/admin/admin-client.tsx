@@ -24,9 +24,6 @@ type AdminClientProps = {
 
 export default function AdminClient({fetchedExams}:AdminClientProps){
   const router = useRouter()
-  fetchedExams.map((elements)=>{
-    console.log(elements.images)
-  })
     return (
       <div className="w-full max-w-md m-auto mt-20 space-y-6">
       <div className="flex justify-center align-center gap-5">

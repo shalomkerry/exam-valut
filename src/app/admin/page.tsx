@@ -2,12 +2,11 @@ import AdminClient from "./admin-client";
 import { db } from "@/db";
 import { exams, subjects ,examImages} from "@/db/data_schema";
 import auth from "@/lib/auth/auth";
-import { sql, desc, eq } from "drizzle-orm";
-import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { sql, eq } from "drizzle-orm";
+ import { headers } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 
 export type ExamImages = typeof examImages.$inferSelect;
-
 type SinglePendingExam = {
   exam: {
     id: number;
@@ -37,9 +36,12 @@ export default async function AdminPage(){
  const session = await auth.api.getSession({
     headers: currentHeaders,
   });
- const user = session?.user?.role || "admin";
-console.log(user)
-if(user!='admin'){
+ const user = session?.user?.role 
+if(user=='approver'){
+  redirect('/admin/upload')
+}
+
+if(user!='admin'  ){
   notFound()
 }
   return (

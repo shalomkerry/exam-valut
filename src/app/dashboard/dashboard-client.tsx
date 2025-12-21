@@ -46,7 +46,7 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
       <select 
         value={subjectFilter} 
         onChange={(e) => setSubjectFilter(e.target.value)}
-        className="px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none w-40 bg-gray-900 rounded-sm"
+        className="px-4 py-2 rounded-xl z-0 rounded-tl-lg rounded-bl-lg outline-none w-40 bg-gray-900 "
       >
         <option value="">Courses {subjects.length}</option>
 
