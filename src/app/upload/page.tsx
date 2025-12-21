@@ -12,12 +12,12 @@ export default async function UploadPage() {
     headers: currentHeaders,
   });
  const user = session?.user 
- ? {id:session.user.id,role:session.user.role}
- : {id:'',role:''}
+ ? {id:session.user.id,role:session.user.role,name:session.user.name}
+ : {id:'',role:'',name:'unknown'}
+ let userName= user.name
   return (
-    <div className="min-h-screen min-w-screen  flex flex-col justify-center align-center bg-background">
-      <UploadClient/>
-      <UploadForm subjects={subjects} user={user}/>
+    <div className="p-6 max-w-6xl mx-auto">
+      <UploadClient user={user} subjects={subjects}/>
     </div>
   )
 }

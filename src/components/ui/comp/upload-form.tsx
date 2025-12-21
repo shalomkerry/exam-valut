@@ -13,6 +13,7 @@ import { toast } from "sonner"
 import Swal from 'sweetalert2'
 type User = {
 id:string,
+name:string,
 role:string
 }
 
@@ -95,13 +96,7 @@ async function handleFileUpload(filesToUpload: FileList){
     
   }
 }
-
-  useEffect(()=>{
-console.log(formData)
-console.log(typeof(files))
-  },[formData])
-
-  const handleFormSubmit = async () => {
+const handleFormSubmit = async () => {
 if(formData.imageURl.length==0){
   Swal.fire({
   title: 'Error!',
@@ -234,10 +229,10 @@ const handleChange = (e:any)=>{
       <div className="space-y-2">
         <Label htmlFor="courseId">Course</Label>
         <Select  onValueChange={handleSubjectChange} name='subject_id' required>
-          <SelectTrigger>
+          <SelectTrigger className="border-white">
             <SelectValue placeholder="Select a course" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-gray-900">
             {subjects.map((course) => (
               <SelectItem key={course.id} value={course.id.toString()}>
               {course.title}
@@ -252,10 +247,10 @@ const handleChange = (e:any)=>{
         <div className="space-y-2">
           <Label htmlFor="year">Year</Label>
           <Select name="year" onValueChange={handleYearChange} required>
-            <SelectTrigger>
+            <SelectTrigger className="border-white">
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-gray-900">
               {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}
@@ -265,13 +260,13 @@ const handleChange = (e:any)=>{
           </Select>
         </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="examType">Exam Type</Label>
-        <Select name="examType" onValueChange={handleTypeChange}required>
-          <SelectTrigger>
+      <div className="space-y-2 ">
+        <Label htmlFor="examType" >Exam Type</Label>
+        <Select name="examType"  onValueChange={handleTypeChange} required >
+          <SelectTrigger className="border-white">
             <SelectValue placeholder="Select exam type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-gray-900">
             <SelectItem value="midterm">Midterm</SelectItem>
             <SelectItem value="Final">Final</SelectItem>
             <SelectItem value="Quiz">Quiz</SelectItem>
@@ -284,7 +279,7 @@ const handleChange = (e:any)=>{
 
       <div className="space-y-2">
         <Label htmlFor="title">Title</Label>
-        <Input type="text" name="title" onChange={handleChange} value={formData.title} placeholder="AAU-PSYCHOLOGY-MID-2025" />
+        <Input type="text" name="title" onChange={handleChange} value={formData.title} className="border-white" placeholder="AAU-PSYCHOLOGY-MID-2025" />
       </div>
 
       {/* File Upload */}

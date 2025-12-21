@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { eq, sql } from "drizzle-orm";
 import { exams, examImages } from "@/db/data_schema";
 import { loadSubjects } from "@/actions/FetchSubjects";
-import Header from "./header";
+import Header from "../../../components/ui/comp/HeaderBack";
 import auth from "@/lib/auth/auth";
 import { headers } from "next/headers";
 // Fetches all exams for a specific Subject ID
