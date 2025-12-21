@@ -52,8 +52,8 @@ export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
   return (
     <div className="space-y-4">
       {/* Page Navigation */}
-      <div className="flex items-center justify-between rounded-lg border bg-card p-4">
-        <Button variant="outline" size="sm" onClick={goToPrevious} disabled={currentPage === 0}>
+      <div className="flex items-center justify-between rounded-lg bg-[#1E1E1E] p-4">
+        <Button variant="outline" size="sm" className="bg-[#818181]" onClick={goToPrevious} disabled={currentPage === 0}>
           <ChevronLeft className="mr-1 h-4 w-4" />
           Previous
         </Button>
@@ -65,7 +65,7 @@ export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
               onClick={() => setCurrentPage(index)}
               className={cn(
                 "h-8 w-8 rounded-md text-sm font-medium transition-colors",
-                index === currentPage ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80",
+                index === currentPage ? "bg-primary text-primary-foreground" : "bg-[#3F3F3F] hover:bg-muted/80",
               )}
             >
               {index + 1}
@@ -73,7 +73,7 @@ export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
           ))}
         </div>
 
-        <Button variant="outline" size="sm" onClick={goToNext} disabled={currentPage === pages.length - 1}>
+        <Button variant="outline" size="sm" className="bg-[#818181]" onClick={goToNext} disabled={currentPage === pages.length - 1}>
           Next
           <ChevronRight className="ml-1 h-4 w-4" />
         </Button>
@@ -81,19 +81,19 @@ export function ExamPageViewer({ pages, examTitle }: ExamPageViewerProps) {
 
       {/* Content Tabs */}
       <Tabs defaultValue="image" className="w-full ">
-        <TabsList className="grid w-full max-w-xs grid-cols-2">
-          <TabsTrigger value="image" className="flex items-center gap-2">
+        <TabsList className="grid w-full max-w-xs bg-[#1E1E1E] grid-cols-2">
+          <TabsTrigger value="image" className="flex items-center gap-2 disabled:bg-[#818181]">
             <ImageIcon className="h-4 w-4" />
             Image
           </TabsTrigger>
-          <TabsTrigger value="text" className="flex items-center gap-2" disabled={!hasOcrText}>
+          <TabsTrigger value="text" className="flex items-center gap-2 disabled:bg-[#818181]" disabled={!hasOcrText}>
             <FileText className="h-4 w-4" />
             Text
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="image" className="mt-4 bg-muted ">
-          <div className="overflow-hidden rounded-lg  border ">
+        <TabsContent value="image" className="mt-4 bg-[#1E1E1E] ">
+          <div className="overflow-hidden rounded-lg">
             <div className="relative aspect-[8.5/11] w-full">
               <Image
                 src={page.image_url || "/placeholder.svg"}
