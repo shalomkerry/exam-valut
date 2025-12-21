@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   });
  const user = session?.user?.name || session?.user?.email || "User";
   return (
-<div className="p-6 max-w-6xl mx-auto">
+<div className="p-6 max-w-5xl mx-auto">
   
 <DashboardClient initialSubjects={subjects} user={user}/>
 </div>  

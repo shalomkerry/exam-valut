@@ -15,7 +15,7 @@ export default function HeaderComponent({user}:HeaderProp){
       <div className="font-bold text-lg">ExamVault</div>
     </div>
 
-      <button className="bg-slate-800 px-2 rounded-md py-2 flex gap-2" onClick={() => router.push("/upload")}>
+      <button className="bg-slate-800 px-2 mr-4 rounded-md py-2 flex gap-2" onClick={() => router.push("/upload")}>
         <CirclePlus/> Post Exam
       </button>
     <nav className="flex gap-3 items-center justify-center">

@@ -33,10 +33,10 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
    return <>
 
  <HeaderComponent user={user}/> 
-  <section className="text-center mb-6">
-    <h1 className="text-5xl m-0 leading-tight">Access Hundreds of Past Exam Papers</h1>
-    <p className="text-gray-500 mt-2">
-      Find past exam papers with ease. Search by subject to prepare for your next test.
+  <section className="text-center ml-20 mb-6">
+    <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white">Exam Vault</h1>
+    <p className="mt-2 text-2xl md:text-3xl text-white">
+      A catalog of <span className="text-purple-500 font-semibold">previous</span> year <span className="text-purple-500 font-semibold">exams</span>
     </p>
   </section>
 
@@ -65,7 +65,7 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
           <button
             type="button"
             onClick={handleReset}
-            className="rounded-xl px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+            className="ml-2 rounded-md px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
           >
             Reset
           </button>
