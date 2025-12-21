@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Upload, X, FileImage, Loader2, CheckCircle } from "lucide-react"
+import { Upload, Loader2, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -28,8 +28,8 @@ export default function UploadForm({ subjects,user }: UploadFormProps) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [photoUploaded, setPhotoUploaded] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
-  const [isSubmitted, setIsSubmitted] = useState(false); // Loading state
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const [isSubmitted, setIsSubmitted] = useState(false); 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [imageFile, setImageFile] = useState<FileList|{}>({});
 
@@ -58,10 +58,7 @@ export default function UploadForm({ subjects,user }: UploadFormProps) {
 
 
 async function handleFileUpload(filesToUpload: FileList){
-  console.log(filesToUpload)
   if (Object.keys(filesToUpload).length === 0) return; // Guard clause
-  
-
   const newImageUrls: string[] = []; // Local array to hold results
   setIsSubmitting(true); // Set loading state
 
@@ -203,20 +200,20 @@ const handleChange = (e:any)=>{
 
    } 
   return (
-    <div className="max-w-md m-auto w-[600px] px-12 py-3 rounded-md bg-slate-700">
-    <form onSubmit={(e)=>{e.preventDefault();handleFormSubmit()}} className="space-y-6">
+    <div className="max-w-md m-auto w-[600px] px-12 py-3 rounded-md bg-[#1E1E1E]">
+    <form onSubmit={(e)=>{e.preventDefault();handleFormSubmit()}} className="space-y-6 bg-[#1E1E1E]">
       {error && <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">{error}</div>}
 
-      <div className="space-y-2">
+      <div className="space-y-2 bg-[#1E1E1E]">
         <Label>Exam Pages</Label>
         <div
           className={cn(
-            "rounded-lg border-2 border-dashed p-8 text-center transition-colors",
-            files.length > 0 ? "border-primary/50 bg-primary/5" : "hover:bg-muted",
+            "bg-[#1E1E1E] rounded-lg border-zinc-400 border-2 border-dashed p-8 text-center transition-colors",
+            files.length > 0 ? "border-blue-100" : "hover:shadow-black",
           )}
         >
       <Input ref={fileInputRef} id="picture" type="file" multiple name='picture' onChange={handleFileChange} className="mb-4" />
-          <label htmlFor="files" className="flex cursor-pointer flex-col items-center">
+          <label htmlFor="picture" className="flex cursor-pointer flex-col items-center">
             <Upload className="h-10 w-10 text-muted-foreground" />
             <p className="mt-2 font-medium">Click to upload images</p>
             <p className="mt-1 text-sm text-muted-foreground">PNG, JPG up to 10MB each</p>
