@@ -32,7 +32,6 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
   });
    return <>
 
-  <button onClick={()=>router.push('/admin')}>hey</button>
  <HeaderComponent user={user}/> 
   <section className="text-center mb-6">
     <h1 className="text-5xl m-0 leading-tight">Access Hundreds of Past Exam Papers</h1>
@@ -77,7 +76,7 @@ export default function DashboardClient({initialSubjects,user}:DashboardClientPr
         {filtered.map((exam:any) => (
         <Link key={exam.id} href={`/courses/${exam.id}`}>
           <div key={exam.id} className="hover:-translate-y-2 hover:drop-shadow-blue-600 bg-[#3C3E46] rounded-md text:md hover:shadow-zinc-400 shadow-lg hover:text-red-950 overflow-hidden h-[200px] flex flex-col">
-            <img src={exam.image} alt="" className="w-[300px] h-3/4"/>
+            <img src={exam.image} alt="" className="w-full h-3/4"/>
             <div className="m-auto px-2 py-1">
               <h3 className="text-white font-bold leading-tight">{exam.title}</h3>
               </div>
