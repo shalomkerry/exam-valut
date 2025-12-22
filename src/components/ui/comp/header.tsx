@@ -1,4 +1,5 @@
 import {CirclePlus } from"lucide-react"
+import Link from "next/link";
 interface HeaderProp{
     user:string,
 }
@@ -12,7 +13,9 @@ export default function HeaderComponent({user}:HeaderProp){
       <div className="w-10 h-10 rounded-lg bg-[#666363] flex items-center justify-center text-white font-bold">
         EV
       </div>
-      <div className="font-bold text-lg">ExamVault</div>
+      <Link href='/dashboard'>
+        ExamVault
+      </Link> 
     </div>
 
       <button className="bg-slate-800 px-2 mr-4 rounded-md py-2 flex gap-2" onClick={() => router.push("/upload")}>

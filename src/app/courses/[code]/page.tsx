@@ -1,6 +1,6 @@
 import { db } from "@/db"
 import { examImages, exams, subjects } from "@/db/data_schema"
-import {    and, eq,sql} from "drizzle-orm"
+import {and, eq,sql} from "drizzle-orm"
 import { notFound } from "next/navigation"
 import  ExamClient from "./subject-client"
 

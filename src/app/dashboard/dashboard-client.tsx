@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter} from "next/navigation";
 import {Subjects} from "@/types/types"
-import {CirclePlus } from"lucide-react"
 import {Search } from"lucide-react"
 import Link from "next/link";
 import HeaderComponent from "@/components/ui/comp/header";

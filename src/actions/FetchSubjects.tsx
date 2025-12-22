@@ -1,8 +1,6 @@
 'use server'; 
-import { exams } from '@/db/data_schema';
 import { db } from '@/db/index';
 import { unstable_cache } from 'next/cache';
-import { eq } from 'drizzle-orm';
 
 const getCachedSubjects = unstable_cache(
   async ()=>{

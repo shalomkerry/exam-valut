@@ -2,6 +2,7 @@
 import Header from "@/components/ui/comp/HeaderBack"
 import UploadForm from "@/components/ui/comp/upload-form"
 import {Subjects} from '@/types/types'
+import Link from "next/link"
 
 type User = {
 id:string,
