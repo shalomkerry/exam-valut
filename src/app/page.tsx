@@ -21,7 +21,7 @@ export default function Home() {
               Browse Exams
             </Link>
             <Link
-              href="/dashboard"
+              href="/signup"
               className="rounded-md bg-white px-5 py-3 text-base font-semibold text-black transition hover:bg-gray-100"
             >
               Sign up
