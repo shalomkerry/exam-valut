@@ -13,10 +13,7 @@ export default function Header({ user }: HeaderProps) {
   <header className="flex items-center justify-between mb-6">
 
     <div className="flex gap-4 items-center">
-      <div className="w-10 h-10 rounded-lg bg-[#666363] flex items-center justify-center text-white font-bold">
-        EV
-      </div>
-      <div className="font-bold text-lg">
+    <div className="font-bold text-lg">
       <Link href='/dashboard'>
         ExamVault
       </Link> 

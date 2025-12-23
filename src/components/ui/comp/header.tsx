@@ -10,9 +10,11 @@ export default function HeaderComponent({user}:HeaderProp){
   <header className="flex items-center justify-between mb-6">
 
     <div className="flex gap-4 items-center">
+    <div className="font-bold text-lg">
       <Link href='/dashboard'>
         ExamVault
       </Link> 
+        </div>
     </div>
 
       <button className="bg-slate-800 px-2 mr-4 rounded-md py-2 flex gap-2" onClick={() => router.push("/upload")}>
