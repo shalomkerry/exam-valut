@@ -45,6 +45,14 @@ export const user = pgTable("user", {
 });
 
 
+// --- Departments Table ---
+
+export const departments = pgTable('departments',{
+id:integer("id").primaryKey().generatedAlwaysAsIdentity(),
+name: text('name').notNull().unique(),
+image: text('image')
+})
+
 // --- Subjects Table ---
 export const subjects = pgTable('subjects',{
 id:integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -52,6 +60,7 @@ title: text('title').notNull().unique(),
 type: text('type').notNull(),
 image: text('image').notNull(),
 sub_code:text('sub_code').unique().notNull(),
+departmentId:integer('departmentId').references(()=>departments.id,{onDelete:'cascade'}).notNull(),
 })
 
 // --- Exam Images Table ---

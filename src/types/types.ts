@@ -23,4 +23,11 @@ export type Subjects = {
   type:string;
   image:string,
   sub_code:string,
+  departmentId:number,
 };
+
+export type Department = {
+  id: number;
+  name: string;
+  image:string,
+}

@@ -1,19 +1,12 @@
-import { loadSubjects } from "@/actions/FetchSubjects";
+import { loadDepartments, loadSubjects } from "@/actions/FetchSubjects";
 import DashboardClient from "./dashboard-client";
 import auth from "@/lib/auth/auth";
 import { headers } from "next/headers";
-
-export type Subjects_Type = {
-  id: number;
-  title: string;
-  type:string;
-  image:string,
-  sub_code:string,
-};
+import { Department, Subjects } from "@/types/types";
 
 export default async function DashboardPage() {
-  // const router = useRouter();
-  const subjects = await loadSubjects() as Subjects_Type[]
+  const subjects = await loadSubjects() as Subjects[];
+  const departments = await loadDepartments() as Department[];
  const currentHeaders = await headers();
  const session = await auth.api.getSession({
     headers: currentHeaders,
@@ -22,7 +15,7 @@ export default async function DashboardPage() {
   return (
 <div className="p-6 max-w-5xl mx-auto">
   
-<DashboardClient initialSubjects={subjects} user={user}/>
+<DashboardClient subjects={subjects} departments={departments} user={user}/>
 </div>  
 );
 }

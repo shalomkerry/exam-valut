@@ -1,6 +1,16 @@
-CREATE TYPE "public"."user_role" AS ENUM('editor', 'approver', 'admin');--> statement-breakpoint
-CREATE TYPE "public"."edit_status" AS ENUM('pending', 'approved', 'rejected');--> statement-breakpoint
-CREATE TYPE "public"."exam_type" AS ENUM('final', 'midterm', 'quiz');--> statement-breakpoint
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
+        CREATE TYPE "public"."user_role" AS ENUM('editor', 'approver', 'admin');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'edit_status') THEN
+        CREATE TYPE "public"."edit_status" AS ENUM('pending', 'approved', 'rejected');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'exam_type') THEN
+        CREATE TYPE "public"."exam_type" AS ENUM('final', 'midterm', 'quiz');
+    END IF;
+END $$;
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"account_id" text NOT NULL,

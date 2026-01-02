@@ -1,6 +1,7 @@
 'use server'; 
 import { db } from '@/db/index';
 import { unstable_cache } from 'next/cache';
+import { getHeapCodeStatistics } from 'v8';
 
 const getCachedSubjects = unstable_cache(
   async ()=>{
@@ -25,8 +26,19 @@ return await db.query.exams.findMany()
     tags:['exams']
   }
 )
-
-
+const getCachedDepartments = unstable_cache(
+  async()=>{
+    return await db.query.departments.findMany()
+  },['department-list'],
+  {
+    revalidate:3600,
+    tags:['department']
+  }
+)
+export async function loadDepartments(){
+  const data =  getCachedDepartments()  
+  return data 
+}
 export async function loadSubjects() {
   const data =  getCachedSubjects()  
   return data 

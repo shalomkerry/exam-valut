@@ -8,6 +8,20 @@
       "when": 1763809550018,
       "tag": "0000_typical_freak",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1767321170035,
+      "tag": "0001_wandering_spirit",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767321515447,
+      "tag": "0002_youthful_the_spike",
+      "breakpoints": true
     }
   ]
 }
