@@ -60,7 +60,6 @@ export default async function DepartmentPage({
                 )}
                 <div className="m-auto w-full px-3 py-2">
                   <h3 className="text-white font-bold leading-tight">{subject.title}</h3>
-                  <p className="text-xs text-slate-200">Code: {subject.sub_code}</p>
                 </div>
               </div>
             </Link>

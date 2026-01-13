@@ -43,7 +43,7 @@ export default function DashboardClient({ subjects, departments, user }: Dashboa
       <section className="text-center ml-20 mb-6">
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white">Exam Vault</h1>
         <p className="mt-2 text-2xl md:text-3xl text-white">
-          Browse <span className="text-purple-500 font-semibold">departments</span> to reach their
+          Browse <span className="text-purple-500 font-semibold">departments</span> and 
           <span className="text-purple-500 font-semibold"> subjects</span>
         </p>
       </section>
